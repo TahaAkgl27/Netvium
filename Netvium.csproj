@@ -1,0 +1,76 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>NetviumLogo.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+  </PropertyGroup>
+
+  <!-- Agent ayrı bir proje; ana uygulamaya compile edilmesin -->
+  <ItemGroup>
+    <Compile Remove="Netvium.Agent\\**\\*.cs" />
+    <Compile Remove="Netvium.Agent.Tests\\**\\*.cs" />
+    <Compile Remove="tools\\**\\*.cs" />
+    <Compile Remove="Netvium.AIGuide.Tests\\**\\*.cs" />
+    <Compile Remove="Netvium.Identity.Api\\**\\*.cs" />
+    <Compile Remove="Netvium.Identity.Api.Tests\\**\\*.cs" />
+    <Compile Remove="Netvium.Account.Tests\\**\\*.cs" />
+    <None Remove="Netvium.Agent\\**\\*" />
+    <None Remove="Netvium.Agent.Tests\\**\\*" />
+    <None Remove="tools\\**\\*" />
+    <None Remove="Netvium.AIGuide.Tests\\**\\*" />
+    <None Remove="Netvium.Identity.Api\\**\\*" />
+    <None Remove="Netvium.Identity.Api.Tests\\**\\*" />
+    <None Remove="Netvium.Account.Tests\\**\\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\AIGuide\KnowledgePacks\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\AIGuide\ExperiencePacks\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AxMSTSCLib" Version="1.0.1" />
+    <Resource Include="NetviumLogo.png" />
+    <Resource Include="NetviumLogo.ico" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.22" />
+    <PackageReference Include="System.Management" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="AIGuideQaRunner" />
+    <InternalsVisibleTo Include="Netvium.AIGuide.Tests" />
+    <InternalsVisibleTo Include="RdpCleanSmokeRunner" />
+    <InternalsVisibleTo Include="Netvium.Account.Tests" />
+  </ItemGroup>
+
+  <!-- FAZ 6E (2026-07-23): Excluded from production compilation after FAZ 6E call-graph verification. Files are retained for rollback. -->
+  <ItemGroup>
+    <Compile Remove="Services\Licensing\**\*.cs" />
+    <Compile Remove="Services\LicensingUiState.cs" />
+    <Compile Remove="Models\LicenseRecord.cs" />
+    <Compile Remove="Rdp\EmbeddedRdpClient.cs" />
+    <Compile Remove="Rdp\RdpBlackScreenDiagnostics.cs" />
+    <Compile Remove="Rdp\RdpConnectDeadline.cs" />
+    <Compile Remove="Rdp\RdpConnectionManager.cs" />
+    <Compile Remove="Rdp\RdpConnectionTimeline.cs" />
+    <Compile Remove="Rdp\RdpOcxEventSink.cs" />
+    <Compile Remove="Rdp\RdpSecurityProfile.cs" />
+    <Compile Remove="Rdp\RdpSecurityProfiles.cs" />
+    <Compile Remove="Views\RdpSessionView.xaml.cs" />
+    <Page Remove="Views\RdpSessionView.xaml" />
+  </ItemGroup></Project>

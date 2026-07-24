@@ -1,0 +1,58 @@
+# Build and release outputs
+.cursor-build-check/
+**/bin/
+**/obj/
+artifacts/
+**/TestResults/
+packages/
+publish/
+**/.staging-*/
+
+# IDE and user-specific files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.idea/
+
+# Logs, dumps and local diagnostics
+*.log
+*.dmp
+*.dump
+*.nsnap
+
+# Connection/user data and local databases
+*.rdp
+license.dat
+agent.key.dpapi
+**/appsettings.*.local.json
+**/appsettings.Local.json
+**/appsettings.Production.json
+**/*.db
+**/*.sqlite
+**/*.sqlite3
+**/local-secrets/
+**/secrets/
+
+# Certificates and private keys
+*.pfx
+*.p12
+*.pem
+*.key
+*.snk
+
+# Coverage and test output
+coverage/
+.coverage/
+**/coverage*.xml
+
+# Dormant legacy/local-only sources containing historical licensing or fixture secrets.
+# Active project excludes these paths from compilation; do not stage them in the baseline.
+Services/Licensing/
+Services/LicensingUiState.cs
+Models/LicenseRecord.cs
+
+# Local-only endpoint/credential fixture runners
+/tools/SnapshotInspectRunner/
+/tools/RdpPixelCompareRunner/

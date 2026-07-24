@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "domain": "iis",
+  "entries": [
+    {
+      "id": "iis-binding-apppool",
+      "priority": 100,
+      "match": {
+        "intents": ["IisBindingOrAppPool"],
+        "goals": ["ConfigureIis"],
+        "workflows": ["iis"],
+        "screens": ["IisManager"]
+      },
+      "commonMistakes": [
+        {
+          "tr": "Binding'de yanlis port/host header, durmus app pool, sertifikanin yanlis store'da olmasi ve NTFS izin eksikligi sik gorulur.",
+          "en": "Wrong port/host header in bindings, stopped app pool, certificate in wrong store, and missing NTFS permissions are common."
+        }
+      ],
+      "verificationChecks": [
+        {
+          "tr": "Site bindings, app pool state, Event Viewer, IIS logs, certificate binding ve klasor izinlerini kontrol et.",
+          "en": "Check site bindings, app pool state, Event Viewer, IIS logs, certificate binding, and folder permissions."
+        }
+      ],
+      "expertTips": [
+        {
+          "tr": "Application pool identity izin problemi binding duzeltildikten sonra bile 401/503 uretebilir.",
+          "en": "Application pool identity permission issues can still cause 401/503 even after fixing bindings."
+        }
+      ]
+    }
+  ]
+}

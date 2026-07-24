@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "domain": "event-viewer",
+  "entries": [
+    {
+      "id": "event-1074-planned-restart",
+      "priority": 120,
+      "match": {
+        "intents": ["EventId1074Analysis", "EventLogReview"],
+        "goals": ["ReviewEvents"],
+        "workflows": ["event-viewer"],
+        "screens": ["EventViewer"],
+        "eventIds": ["1074"],
+        "questionKeywords": ["1074"]
+      },
+      "likelyCauses": [
+        {
+          "tr": "Event ID 1074 planli yeniden baslatma/kapatma olabilir; Windows Update veya TrustedInstaller sik gorulur.",
+          "en": "Event ID 1074 may indicate a planned restart/shutdown; Windows Update or TrustedInstaller is common."
+        }
+      ],
+      "verificationChecks": [
+        {
+          "tr": "User32 kaynagini, Windows Update gecmisini ve ayni zaman diliminde Event 6008 ile 41 kayitlarini kontrol et.",
+          "en": "Check User32 source, Windows Update history, and nearby Event 6008 and 41 entries."
+        }
+      ],
+      "expertTips": [
+        {
+          "tr": "1074 tek basina beklenen kapanma demektir; beklenmeyen kapanma icin 6008 ve 41 ile capraz kontrol yap.",
+          "en": "1074 alone means planned shutdown; cross-check 6008 and 41 for unexpected shutdowns."
+        }
+      ]
+    },
+    {
+      "id": "event-6008-unexpected-shutdown",
+      "priority": 110,
+      "match": {
+        "intents": ["EventLogReview"],
+        "goals": ["ReviewEvents"],
+        "workflows": ["event-viewer"],
+        "screens": ["EventViewer"],
+        "eventIds": ["6008"],
+        "questionKeywords": ["6008"]
+      },
+      "likelyCauses": [
+        {
+          "tr": "Event ID 6008 beklenmeyen kapanmayi gosterir; guc kesintisi, crash veya forced reset olabilir.",
+          "en": "Event ID 6008 indicates unexpected shutdown; power loss, crash, or forced reset are possible."
+        }
+      ],
+      "verificationChecks": [
+        {
+          "tr": "Ayni oturumda Event 41, guc kaynagi ve disk/driver hatalarini kontrol et.",
+          "en": "Check Event 41, power source, and disk/driver errors in the same session."
+        }
+      ]
+    },
+    {
+      "id": "event-41-kernel-power",
+      "priority": 110,
+      "match": {
+        "intents": ["EventLogReview"],
+        "goals": ["ReviewEvents"],
+        "workflows": ["event-viewer"],
+        "screens": ["EventViewer"],
+        "eventIds": ["41"],
+        "questionKeywords": ["41"]
+      },
+      "likelyCauses": [
+        {
+          "tr": "Event ID 41 sistem duzgun kapanmadan yeniden basladi; guc, driver, hardware veya freeze kaynakli olabilir.",
+          "en": "Event ID 41 means the system restarted without a clean shutdown; power, driver, hardware, or freeze may be involved."
+        }
+      ],
+      "troubleshootingSteps": [
+        {
+          "tr": "Bug Check kodu, mini dump, guc kablosu/UPS ve son driver degisikliklerini incele.",
+          "en": "Review bug check code, mini dump, power cable/UPS, and recent driver changes."
+        }
+      ]
+    }
+  ]
+}

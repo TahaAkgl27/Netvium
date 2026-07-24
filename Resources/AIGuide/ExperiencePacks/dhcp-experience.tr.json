@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "domain": "dhcp",
+  "entries": [
+    {
+      "id": "dhcp-reservation-pitfalls",
+      "priority": 100,
+      "match": {
+        "intents": ["DhcpReservation"],
+        "goals": ["CreateReservation"],
+        "workflows": ["dhcp"],
+        "screens": ["Dhcp"]
+      },
+      "commonMistakes": [
+        {
+          "tr": "Rezervasyonu yanlis scope altinda olusturmak veya MAC adresini yanlis formatta girmek cok yaygindir.",
+          "en": "Creating a reservation in the wrong scope or using an invalid MAC format is very common."
+        }
+      ],
+      "verificationChecks": [
+        {
+          "tr": "Dogru scope, address pool, mevcut lease kayitlari, MAC formati ve DHCP servis durumunu kontrol et.",
+          "en": "Verify correct scope, address pool, existing leases, MAC format, and DHCP service status."
+        }
+      ],
+      "expertTips": [
+        {
+          "tr": "Pool disi IP secme ve mevcut lease ile cakisma en sik hatadir; rezervasyon sonrasi istemcide ipconfig /renew yap.",
+          "en": "Picking an IP outside the pool or conflicting with an existing lease is common; run ipconfig /renew after reservation."
+        }
+      ],
+      "riskWarnings": [
+        {
+          "tr": "Aktif lease varken ayni IP'ye rezervasyon vermek cakismaya yol acabilir.",
+          "en": "Reserving an IP already in use by an active lease can cause conflicts."
+        }
+      ]
+    },
+    {
+      "id": "dhcp-general",
+      "priority": 50,
+      "match": {
+        "intents": ["DhcpManagement", "IpConflictPrevention"],
+        "workflows": ["dhcp"],
+        "screens": ["Dhcp"]
+      },
+      "verificationChecks": [
+        {
+          "tr": "Scope options, lease suresi ve failover/replication durumunu gozden gecir.",
+          "en": "Review scope options, lease duration, and failover/replication state."
+        }
+      ]
+    }
+  ]
+}

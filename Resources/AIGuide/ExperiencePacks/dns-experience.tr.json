@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "domain": "dns",
+  "entries": [
+    {
+      "id": "dns-a-record-checks",
+      "priority": 100,
+      "match": {
+        "intents": ["DnsRecordCreation"],
+        "goals": ["CreateDnsRecord"],
+        "workflows": ["dns"],
+        "screens": ["DnsManager"],
+        "questionKeywords": ["a kayd", "a record", "host"]
+      },
+      "commonMistakes": [
+        {
+          "tr": "Forward zone yerine reverse zone karistirmak, PTR unutmak veya eski kayit conflict'i en sik hatalardir.",
+          "en": "Mixing forward and reverse zones, forgetting PTR, and old record conflicts are common mistakes."
+        }
+      ],
+      "verificationChecks": [
+        {
+          "tr": "nslookup, ping, ipconfig /flushdns, zone replication ve duplicate record kontrolu yap.",
+          "en": "Run nslookup, ping, ipconfig /flushdns, and check zone replication and duplicate records."
+        }
+      ],
+      "expertTips": [
+        {
+          "tr": "Kayit sonrasi nslookup, ping ve duplicate kayit kontrolu yap; replikasyon gecikmesini hesaba kat.",
+          "en": "After creating the record, run nslookup, ping, and duplicate record checks; account for replication delay."
+        },
+        {
+          "tr": "Yanlis TTL ve replikasyon gecikmesi 'kayit calismiyor' sikayetlerinin sik nedenidir.",
+          "en": "Wrong TTL and replication delay are frequent causes of 'record not working' reports."
+        }
+      ]
+    },
+    {
+      "id": "dns-general",
+      "priority": 50,
+      "match": {
+        "intents": ["DnsManagement"],
+        "workflows": ["dns"],
+        "screens": ["DnsManager"]
+      },
+      "verificationChecks": [
+        {
+          "tr": "Forward/reverse zone secimini ve scavenging ayarlarini dogrula.",
+          "en": "Verify forward/reverse zone selection and scavenging settings."
+        }
+      ]
+    }
+  ]
+}

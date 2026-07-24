@@ -1,0 +1,78 @@
+name: Netvium Windows Release Validation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_VERSION: 8.0.x
+
+jobs:
+  windows-validation:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore solution
+        run: dotnet restore Netvium.sln
+
+      - name: Build Debug
+        run: dotnet build Netvium.sln -c Debug --no-restore
+
+      - name: Build Release
+        run: dotnet build Netvium.sln -c Release --no-restore
+
+      - name: Agent tests
+        run: dotnet test Netvium.Agent.Tests/Netvium.Agent.Tests.csproj -c Debug --no-restore --logger "trx;LogFileName=agent.trx"
+
+      - name: Account tests
+        run: dotnet test Netvium.Account.Tests/Netvium.Account.Tests.csproj -c Debug --no-restore --logger "trx;LogFileName=account.trx"
+
+      - name: Identity API tests
+        run: dotnet test Netvium.Identity.Api.Tests/Netvium.Identity.Api.Tests.csproj -c Debug --no-restore --logger "trx;LogFileName=identity.trx"
+
+      - name: AIGuide tests
+        run: dotnet test Netvium.AIGuide.Tests/Netvium.AIGuide.Tests.csproj -c Debug --no-restore --logger "trx;LogFileName=aiguide.trx"
+
+      - name: Rc2Smoke
+        run: dotnet run --project tools/Rc2Smoke/Rc2Smoke.csproj -c Release --no-restore
+
+      - name: Install WiX toolset
+        shell: pwsh
+        run: dotnet tool install --global wix --version 4.0.5
+
+      - name: Controlled pilot package
+        shell: pwsh
+        run: |
+          $version = (Select-Xml -Path Directory.Build.props -XPath '/Project/PropertyGroup/VersionPrefix').Node.InnerText
+          ./scripts/Build-NetviumRelease.ps1 -Version $version -Configuration Release -Runtime win-x64
+
+      - name: Release gate
+        shell: pwsh
+        run: |
+          $version = (Select-Xml -Path Directory.Build.props -XPath '/Project/PropertyGroup/VersionPrefix').Node.InnerText
+          ./scripts/Test-NetviumRelease.ps1 -Path "artifacts/release/$version" -RequireInstaller
+
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: netvium-windows-validation
+          path: |
+            artifacts/release/**
+            **/TestResults/**
+          if-no-files-found: warn
+
+      # Signing is intentionally excluded from PR/build validation. A protected release
+      # environment must call Sign-NetviumRelease.ps1 with a certificate-store thumbprint.

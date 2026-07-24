@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "notVisiblePhrases": [
+    "not visible",
+    "görünmüyor",
+    "görünmiyor",
+    "is not visible",
+    "not on screen",
+    "ekranda yok"
+  ],
+  "actionOnTargetPhrases": [
+    "right-click",
+    "sağ tık",
+    "sag tik",
+    "right click",
+    "properties",
+    "özellik",
+    "ozellik"
+  ],
+  "navigateSafePhrases": [
+    "navigate",
+    "address bar",
+    "adres"
+  ],
+  "rules": [
+    {
+      "id": "TargetInvisibleClickTarget",
+      "description": "Cannot click a target that evidence says is not visible",
+      "requiresTargetNotVisible": true,
+      "requiresActionOnTarget": true,
+      "requiresFolderInInstruction": true,
+      "forbidUnlessNavigatePhrase": true
+    },
+    {
+      "id": "WrongScreenPerformAction",
+      "description": "Cannot perform workflow action on wrong screen",
+      "requiresWrongScreen": true,
+      "requiresActionOnTarget": true,
+      "forbidUnlessNavigatePhrase": false
+    },
+    {
+      "id": "ClarificationPendingWorkflowContinue",
+      "description": "Cannot continue workflow steps while clarification is pending",
+      "requiresClarificationPending": true,
+      "requiresWorkflowStepBeyondClarify": true
+    }
+  ]
+}

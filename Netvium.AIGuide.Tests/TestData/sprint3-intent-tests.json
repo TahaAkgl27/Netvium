@@ -1,0 +1,61 @@
+{
+  "intentDetection": [
+    {
+      "name": "ProxyAddress_IsUserManagement_NotFolderPermission",
+      "userQuestion": "ProxyAddress ekleyeceğim",
+      "expectIntent": "UserManagement"
+    },
+    {
+      "name": "DisableUser_IsUserManagement",
+      "userQuestion": "Kullanıcıyı disable edeceğim",
+      "expectIntent": "UserManagement"
+    },
+    {
+      "name": "ForwardLookupZone_IsDnsManagement",
+      "userQuestion": "Forward lookup zone açacağım",
+      "expectIntent": "DnsManagement"
+    }
+  ],
+  "decide": [
+    {
+      "name": "IisFolderPermission_TriggersWrongScreenGuard",
+      "userQuestion": "IIS klasör izni vereceğim D:\\inetpub\\wwwroot",
+      "activeWindowTitle": "IIS Manager",
+      "screenKind": "IisManager",
+      "expectWorkflowName": "wrong-screen-guard",
+      "expectConfidence": "Low",
+      "expectObservationContains": "File Explorer"
+    },
+    {
+      "name": "AmbiguousFolderPermission_AsksClarification",
+      "userQuestion": "Klasöre izin vereceğim",
+      "activeWindowTitle": "File Explorer",
+      "screenKind": "FileExplorer",
+      "expectWorkflowName": "clarification",
+      "expectShouldAskQuestion": true
+    },
+    {
+      "name": "SelectedItWithoutPath_HighConfidence",
+      "userQuestion": "Taha görme izni ver",
+      "activeWindowTitle": "File Explorer - IT",
+      "screenKind": "FileExplorer",
+      "selectedListItem": "IT",
+      "ocrStatusBar": "D:\\Shared\\IT",
+      "statusBarText": "D:\\Shared\\IT",
+      "expectConfidence": "High",
+      "expectIntent": "FolderPermission"
+    }
+  ],
+  "confidence": [
+    {
+      "name": "HallucinationGuardTriggered_ForcesLow",
+      "screenCorrect": true,
+      "intentDetected": true,
+      "workflowMatched": true,
+      "targetVisible": true,
+      "targetVerified": true,
+      "hallucinationGuardTriggered": true,
+      "expectLabel": "Low"
+    }
+  ]
+}

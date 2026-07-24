@@ -1,0 +1,247 @@
+<Window x:Class="Netvium.Views.Account.AccountWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Netvium Hesap" Width="560" Height="780" MinWidth="500" MinHeight="780"
+        WindowStartupLocation="CenterScreen" Foreground="#E8EDF5"
+        ResizeMode="NoResize" WindowStyle="None" AllowsTransparency="True" Background="Transparent">
+    <Window.Resources>
+        <Style x:Key="FieldLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#B7C2D1"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Margin" Value="0,0,0,7"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="44"/><Setter Property="Padding" Value="13,0"/>
+            <Setter Property="Background" Value="#111A28"/><Setter Property="Foreground" Value="#E8EDF5"/>
+            <Setter Property="BorderBrush" Value="#26354B"/><Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/><Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="CaretBrush" Value="#A5B4FC"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="FieldBorder" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="FieldBorder" Property="BorderBrush" Value="#3A4C68"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="FieldBorder" Property="BorderBrush" Value="#5B7CFA"/>
+                                <Setter TargetName="FieldBorder" Property="Background" Value="#131F32"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="PasswordBox">
+            <Setter Property="Height" Value="44"/><Setter Property="Padding" Value="13,0"/>
+            <Setter Property="Background" Value="#111A28"/><Setter Property="Foreground" Value="#E8EDF5"/>
+            <Setter Property="BorderBrush" Value="#26354B"/><Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/><Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="PasswordBox">
+                        <Border x:Name="FieldBorder" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10" SnapsToDevicePixels="True">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="FieldBorder" Property="BorderBrush" Value="#3A4C68"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="FieldBorder" Property="BorderBrush" Value="#5B7CFA"/>
+                                <Setter TargetName="FieldBorder" Property="Background" Value="#131F32"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Height" Value="46"/><Setter Property="Background" Value="#4F73FF"/>
+            <Setter Property="Foreground" Value="White"/><Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/><Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder" Background="{TemplateBinding Background}" CornerRadius="10"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#6283FF"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="#3D60E8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value=".5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="LinkButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/><Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#8EA8FF"/><Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="8,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="LinkBorder" Background="{TemplateBinding Background}" CornerRadius="7"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="LinkBorder" Property="Background" Value="#17243A"/>
+                                <Setter Property="Foreground" Value="#BAC8FF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="AccountTabButton" TargetType="Button" BasedOn="{StaticResource LinkButton}">
+            <Setter Property="Foreground" Value="#94A3B8"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="8,10"/>
+        </Style>
+    </Window.Resources>
+    <Border Background="#080E18" BorderBrush="#243044" BorderThickness="1" CornerRadius="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="36"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Background="#0D1522" MouseLeftButtonDown="OnTitleBarMouseLeftButtonDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="42"/>
+                    <ColumnDefinition Width="42"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0,0,0">
+                    <Border Width="18" Height="18" CornerRadius="5" Background="#5B7CFA" Margin="0,0,8,0">
+                        <Image Source="pack://application:,,,/NetviumLogo.png" Width="12" Height="12"/>
+                    </Border>
+                    <TextBlock Text="Netvium Hesap" Foreground="#CBD5E1" FontSize="11" VerticalAlignment="Center"/>
+                </StackPanel>
+                <Button Grid.Column="1" Content="&#xE921;" FontFamily="Segoe MDL2 Assets"
+                        Background="Transparent" BorderThickness="0" Foreground="#94A3B8"
+                        ToolTip="Küçült" Click="OnMinimizeClick"/>
+                <Button Grid.Column="2" Content="&#xE8BB;" FontFamily="Segoe MDL2 Assets"
+                        Background="Transparent" BorderThickness="0" Foreground="#94A3B8"
+                        ToolTip="Kapat" Click="OnCloseClick"/>
+            </Grid>
+
+            <Border Grid.Row="1" Width="470" Margin="24" Padding="34,30" CornerRadius="20"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Background="#0D1522" BorderBrush="#202D40" BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="28" ShadowDepth="8" Opacity=".3" Color="#000000"/>
+            </Border.Effect>
+            <StackPanel>
+                <StackPanel HorizontalAlignment="Center">
+                    <Border Width="48" Height="48" CornerRadius="15">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#5B7CFA" Offset="0"/>
+                                <GradientStop Color="#7C3AED" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Image Source="pack://application:,,,/NetviumLogo.png" Width="28" Height="28"/>
+                    </Border>
+                    <TextBlock Text="Netvium" FontSize="25" FontWeight="SemiBold"
+                               HorizontalAlignment="Center" Margin="0,12,0,3"/>
+                    <TextBlock Text="Güvenli hesabınızla devam edin" Foreground="#8492A6"
+                               FontSize="12" HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <Grid Margin="0,22,0,20">
+                    <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition/></Grid.ColumnDefinitions>
+                    <Button x:Name="LoginTabButton" Content="Giriş Yap" Style="{StaticResource AccountTabButton}"
+                            FontWeight="SemiBold" Click="OnLoginTabClick"/>
+                    <Button x:Name="RegisterTabButton" Grid.Column="1" Content="Hesap Oluştur"
+                            Style="{StaticResource AccountTabButton}" Click="OnRegisterTabClick"/>
+                    <Border Height="2" Background="#5B7CFA" VerticalAlignment="Bottom" Grid.Column="0" Margin="16,0">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding FontWeight, ElementName=LoginTabButton}" Value="Normal">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                    <Border Height="2" Background="#5B7CFA" VerticalAlignment="Bottom" Grid.Column="1" Margin="16,0">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding FontWeight, ElementName=RegisterTabButton}" Value="SemiBold">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                </Grid>
+
+                <Grid x:Name="LoginPanel">
+                    <StackPanel>
+                        <TextBlock Text="E-posta" Style="{StaticResource FieldLabel}"/>
+                        <TextBox x:Name="LoginEmailBox" MaxLength="320"/>
+                        <TextBlock Text="Parola" Style="{StaticResource FieldLabel}" Margin="0,16,0,7"/>
+                        <PasswordBox x:Name="LoginPasswordBox" MaxLength="256"/>
+                        <Button Content="Parolamı unuttum (yakında)" Style="{StaticResource LinkButton}"
+                                HorizontalAlignment="Right" Margin="0,7,0,14" Click="OnForgotPasswordClick"/>
+                        <Button x:Name="LoginButton" Content="Giriş Yap" Style="{StaticResource PrimaryButton}" Click="OnLoginClick"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid x:Name="RegisterPanel" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="Görünen ad" Style="{StaticResource FieldLabel}"/>
+                        <TextBox x:Name="RegisterDisplayNameBox" MaxLength="120"/>
+                        <TextBlock Text="E-posta" Style="{StaticResource FieldLabel}" Margin="0,14,0,7"/>
+                        <TextBox x:Name="RegisterEmailBox" MaxLength="320"/>
+                        <TextBlock Text="Parola" Style="{StaticResource FieldLabel}" Margin="0,14,0,7"/>
+                        <PasswordBox x:Name="RegisterPasswordBox" MaxLength="256"/>
+                        <TextBlock Text="En az 10 karakter; büyük/küçük harf ve rakam." Foreground="#75849A"
+                                   FontSize="11" Margin="1,6,0,0"/>
+                        <TextBlock Text="Parola tekrar" Style="{StaticResource FieldLabel}" Margin="0,12,0,7"/>
+                        <PasswordBox x:Name="RegisterPasswordAgainBox" MaxLength="256"/>
+                        <Button x:Name="RegisterButton" Content="Hesap Oluştur" Style="{StaticResource PrimaryButton}"
+                                Margin="0,18,0,0" Click="OnRegisterClick"/>
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Margin="0,18,0,0">
+                    <Border x:Name="StatusPanel" Background="#111A28" BorderBrush="#26354B"
+                            BorderThickness="1" CornerRadius="9" Padding="12,10">
+                        <TextBlock x:Name="StatusText" TextWrapping="Wrap" TextAlignment="Center"
+                                   Foreground="#8492A6" FontSize="11"
+                                   Text="Hesabınıza giriş yapın veya yeni hesap oluşturun."/>
+                    </Border>
+                    <Button Content="Sunucu bağlantı ayarları" Style="{StaticResource LinkButton}"
+                            HorizontalAlignment="Center" Margin="0,7,0,0" Click="OnConnectionSettingsClick"/>
+                </StackPanel>
+            </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

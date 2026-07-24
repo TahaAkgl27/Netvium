@@ -1,0 +1,87 @@
+{
+  "screenCompatibility": [
+    {
+      "name": "ExcelFolderPermission_IsIncompatible",
+      "intent": "FolderPermission",
+      "screenKind": "Unknown",
+      "displayName": "Microsoft Excel - Book1",
+      "expectCompatible": false,
+      "expectConsumerApp": true
+    },
+    {
+      "name": "FileExplorerFolderPermission_IsCompatible",
+      "intent": "FolderPermission",
+      "screenKind": "FileExplorer",
+      "displayName": "File Explorer",
+      "expectCompatible": true
+    },
+    {
+      "name": "DhcpPasswordReset_IsIncompatible",
+      "intent": "PasswordReset",
+      "screenKind": "Dhcp",
+      "displayName": "DHCP",
+      "expectCompatible": false
+    }
+  ],
+  "confidence": [
+    {
+      "name": "WrongScreen_IsLow",
+      "isWrongScreen": true,
+      "expectLabel": "Low",
+      "expectScore": 0
+    },
+    {
+      "name": "VisibleTargetOnCorrectScreen_IsHigh",
+      "screenCorrect": true,
+      "intentDetected": true,
+      "workflowMatched": true,
+      "targetVisible": true,
+      "targetVerified": true,
+      "expectLabel": "High",
+      "expectScore": 100
+    },
+    {
+      "name": "HiddenTarget_CappedAtMedium",
+      "screenCorrect": true,
+      "intentDetected": true,
+      "workflowMatched": true,
+      "targetVisible": false,
+      "targetVerified": true,
+      "isFolderPermissionIntent": true,
+      "expectLabel": "Medium"
+    }
+  ],
+  "decide": [
+    {
+      "name": "ExcelFolderPermission_ReturnsWrongScreenGuard",
+      "userQuestion": "D:\\Shared\\IT klasörüne Taha'ya Read izni vereceğim.",
+      "activeWindowTitle": "Microsoft Excel - Book1",
+      "screenKind": "Unknown",
+      "expectWorkflowName": "wrong-screen-guard",
+      "expectShouldRefuse": true,
+      "expectConfidence": "Low",
+      "expectMinManualSteps": 2
+    },
+    {
+      "name": "HiddenTarget_DoesNotRightClickInvisibleFolder",
+      "userQuestion": "D:\\Shared\\IT için Taha read izni vereceğim",
+      "activeWindowTitle": "File Explorer",
+      "screenKind": "FileExplorer",
+      "ocrStatusBar": "D:\\Shared",
+      "statusBarText": "D:\\Shared",
+      "expectNextStepContains": "adres",
+      "expectObservationContains": "görünmüyor"
+    }
+  ],
+  "hallucination": [
+    {
+      "name": "BlocksRightClickOnHiddenTarget",
+      "targetPath": "D:\\Shared\\IT",
+      "folderName": "IT",
+      "targetVisible": false,
+      "instruction": "IT klasörüne sağ tıkla.",
+      "expectPassed": false,
+      "expectSanitizedContains": "adres"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "actionKeywords": [
+    "sağ tık", "sag tik", "right-click", "right click", "seç", "sec", "select",
+    "properties", "özellik", "ozellik", "security", "güvenlik", "guvenlik"
+  ],
+  "navigateKeywords": [
+    "adres", "address bar", "file explorer aç", "open file explorer"
+  ],
+  "safeNavigateWithPath": {
+    "en": "Type {{path}} in the address bar and press Enter. (Target is not visible yet.)",
+    "tr": "Adres çubuğuna {{path}} yaz ve Enter'a bas. (Hedef henüz ekranda görünmüyor.)"
+  },
+  "safeNavigateGeneric": {
+    "en": "First type the target folder path in the File Explorer address bar.",
+    "tr": "Önce File Explorer'da adres çubuğuna hedef klasör yolunu yaz."
+  },
+  "rules": [
+    "invisible_target_action_block",
+    "selected_object_mismatch_block",
+    "visible_object_required_for_click_action",
+    "user_target_allowed_as_reference_not_action"
+  ]
+}

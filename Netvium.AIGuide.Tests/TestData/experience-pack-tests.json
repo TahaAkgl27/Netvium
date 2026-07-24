@@ -1,0 +1,53 @@
+{
+  "experienceTests": [
+    {
+      "name": "Event1074_WindowsUpdateHint",
+      "userQuestion": "Event ID 1074 ne demek",
+      "screenKind": "EventViewer",
+      "activeWindowTitle": "Event Viewer",
+      "selectedListItem": "System",
+      "expectHintContains": ["Windows Update", "TrustedInstaller"],
+      "expectAttentionInResponse": true
+    },
+    {
+      "name": "FolderPermission_NtfsShareHint",
+      "userQuestion": "D:\\Shared\\IT Taha read izni vereceğim",
+      "screenKind": "FileExplorer",
+      "activeWindowTitle": "File Explorer",
+      "ocrStatusBar": "D:\\Shared\\IT",
+      "selectedListItem": "IT",
+      "expectHintContains": ["NTFS", "payla"],
+      "expectAttentionInResponse": true
+    },
+    {
+      "name": "DhcpReservation_ScopeMacHint",
+      "userQuestion": "Rezervasyon oluşturacağım MAC AA-BB-CC-DD-EE-FF IP 192.168.1.50",
+      "screenKind": "Dhcp",
+      "activeWindowTitle": "DHCP",
+      "expectHintContains": ["scope", "MAC"],
+      "expectAttentionInResponse": true
+    },
+    {
+      "name": "DnsARecord_NslookupHint",
+      "userQuestion": "A kaydı oluştur",
+      "screenKind": "DnsManager",
+      "activeWindowTitle": "DNS Manager",
+      "expectHintContains": ["nslookup"],
+      "expectAttentionInResponse": true
+    },
+    {
+      "name": "IisBinding_AppPoolCertHint",
+      "userQuestion": "SSL sertifikası",
+      "screenKind": "IisManager",
+      "activeWindowTitle": "IIS Manager",
+      "expectHintContains": ["app pool", "sertifika"],
+      "expectAttentionInResponse": true
+    }
+  ],
+  "packValidationTests": [
+    {
+      "name": "AllDomainsHaveEntries",
+      "expectMinEntriesPerDomain": 1
+    }
+  ]
+}

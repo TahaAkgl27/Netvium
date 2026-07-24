@@ -1,0 +1,282 @@
+<UserControl x:Class="Netvium.Views.Dashboard.AiSmartAnalysisExpandedPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:licensing="clr-namespace:Netvium.Views.Licensing"
+             mc:Ignorable="d"
+             d:DesignHeight="1200"
+             d:DesignWidth="1200">
+    <ScrollViewer x:Name="ExpandedContentScrollViewer"
+                  VerticalScrollBarVisibility="Visible"
+                  HorizontalScrollBarVisibility="Disabled"
+                  CanContentScroll="False"
+                  PanningMode="VerticalOnly">
+        <StackPanel Margin="0,0,6,32">
+
+            <!-- §1 AI EXECUTIVE DASHBOARD -->
+            <Border CornerRadius="18" Background="#0A1020" BorderBrush="#26354C" BorderThickness="1" Padding="20" Margin="0,0,0,20">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <TextBlock Text="&#xE774;" FontFamily="Segoe MDL2 Assets" Foreground="#A78BFA" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center" />
+                        <StackPanel>
+                            <TextBlock Text="AI OPERATIONS CENTER" Style="{StaticResource DashKpiLabel}" />
+                            <TextBlock x:Name="V2HeadlineText" Text="Awaiting analysis" Foreground="#E8EDF5" FontSize="18" FontWeight="Bold" TextWrapping="Wrap" MaxWidth="900" />
+                            <TextBlock x:Name="V2SubheadlineText" Text="—" Foreground="#7B8AA3" FontSize="11" Margin="0,4,0,0" TextWrapping="Wrap" MaxWidth="900" />
+                        </StackPanel>
+                    </StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <!-- Health ring -->
+                        <Border Style="{StaticResource DashMiniKpiCard}" Margin="0,0,8,0">
+                            <StackPanel HorizontalAlignment="Center">
+                                <Grid Width="72" Height="72" Margin="0,0,0,6">
+                                    <Ellipse Stroke="#1E2A3F" StrokeThickness="6" />
+                                    <Ellipse x:Name="V2HealthRing" Stroke="#22C55E" StrokeThickness="6" StrokeDashArray="2.2 1.0" RenderTransformOrigin="0.5,0.5">
+                                        <Ellipse.RenderTransform><RotateTransform Angle="-90" /></Ellipse.RenderTransform>
+                                    </Ellipse>
+                                    <TextBlock x:Name="V2HealthScoreText" Text="—" FontSize="20" FontWeight="Bold" Foreground="#E8EDF5" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Grid>
+                                <TextBlock Text="HEALTH" Style="{StaticResource DashKpiLabel}" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                        <!-- Risk badge -->
+                        <Border Grid.Column="1" Style="{StaticResource DashMiniKpiCard}" Margin="0,0,8,0">
+                            <StackPanel VerticalAlignment="Center">
+                                <Border x:Name="V2RiskBadge" CornerRadius="10" Padding="10,6" Background="#1A2A1A" HorizontalAlignment="Center" Margin="0,8,0,8">
+                                    <TextBlock x:Name="V2RiskLevelText" Text="—" FontSize="14" FontWeight="Bold" Foreground="#22C55E" />
+                                </Border>
+                                <TextBlock Text="RISK LEVEL" Style="{StaticResource DashKpiLabel}" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                        <!-- AI Confidence ring -->
+                        <Border Grid.Column="2" Style="{StaticResource DashMiniKpiCard}" Margin="0,0,8,0">
+                            <StackPanel HorizontalAlignment="Center">
+                                <Grid Width="72" Height="72" Margin="0,0,0,6">
+                                    <Ellipse Stroke="#1E2A3F" StrokeThickness="6" />
+                                    <Ellipse x:Name="V2ConfidenceRing" Stroke="#4F8CFF" StrokeThickness="6" StrokeDashArray="2.2 1.0" RenderTransformOrigin="0.5,0.5">
+                                        <Ellipse.RenderTransform><RotateTransform Angle="-90" /></Ellipse.RenderTransform>
+                                    </Ellipse>
+                                    <TextBlock x:Name="V2ConfidenceText" Text="—" FontSize="16" FontWeight="Bold" Foreground="#4F8CFF" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Grid>
+                                <TextBlock Text="AI CONFIDENCE" Style="{StaticResource DashKpiLabel}" HorizontalAlignment="Center" />
+                            </StackPanel>
+                        </Border>
+                        <!-- Business impact -->
+                        <Border Grid.Column="3" Style="{StaticResource DashMiniKpiCard}" Margin="0,0,8,0">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock x:Name="V2BusinessImpactText" Text="—" FontSize="16" FontWeight="Bold" Foreground="#F59E0B" HorizontalAlignment="Center" />
+                                <Border Height="4" CornerRadius="2" Background="#1E2A3F" Margin="0,8,0,0">
+                                    <Border x:Name="V2BusinessImpactBar" Height="4" CornerRadius="2" HorizontalAlignment="Left" Width="40" Background="#F59E0B" />
+                                </Border>
+                                <TextBlock Text="BUSINESS IMPACT" Style="{StaticResource DashKpiLabel}" HorizontalAlignment="Center" Margin="0,8,0,0" />
+                            </StackPanel>
+                        </Border>
+                        <!-- Infra status -->
+                        <Border Grid.Column="4" Style="{StaticResource DashMiniKpiCard}" Margin="0,0,8,0">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Ellipse x:Name="V2InfraStatusDot" Width="14" Height="14" Fill="#64748B" Margin="0,8,0,8" />
+                                <TextBlock x:Name="V2InfraStatusText" Text="—" FontSize="13" FontWeight="SemiBold" Foreground="#E8EDF5" HorizontalAlignment="Center" />
+                                <TextBlock Text="INFRA STATUS" Style="{StaticResource DashKpiLabel}" HorizontalAlignment="Center" Margin="0,6,0,0" />
+                            </StackPanel>
+                        </Border>
+                        <!-- Fix time -->
+                        <Border Grid.Column="5" Style="{StaticResource DashMiniKpiCard}" Margin="0,0,8,0">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock Text="&#xE823;" FontFamily="Segoe MDL2 Assets" FontSize="22" Foreground="#94A3B8" HorizontalAlignment="Center" />
+                                <TextBlock x:Name="V2FixTimeText" Text="—" FontSize="12" FontWeight="SemiBold" Foreground="#E8EDF5" HorizontalAlignment="Center" Margin="0,6,0,0" TextWrapping="Wrap" TextAlignment="Center" />
+                                <TextBlock Text="EST. FIX TIME" Style="{StaticResource DashKpiLabel}" HorizontalAlignment="Center" Margin="0,6,0,0" />
+                            </StackPanel>
+                        </Border>
+                        <!-- Analysis age -->
+                        <Border Grid.Column="6" Style="{StaticResource DashMiniKpiCard}" Margin="0,0,8,0">
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock x:Name="V2AnalysisAgeText" Text="—" FontSize="14" FontWeight="Bold" Foreground="#E8EDF5" HorizontalAlignment="Center" />
+                                <TextBlock Text="ANALYSIS AGE" Style="{StaticResource DashKpiLabel}" HorizontalAlignment="Center" Margin="0,8,0,0" />
+                            </StackPanel>
+                        </Border>
+                        <!-- Source + role -->
+                        <Border Grid.Column="7" Style="{StaticResource DashMiniKpiCard}">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock x:Name="V2SourceText" Text="—" FontSize="11" FontWeight="SemiBold" Foreground="#4F8CFF" TextWrapping="Wrap" />
+                                <TextBlock x:Name="V2RoleText" Text="—" FontSize="10" Foreground="#7B8AA3" Margin="0,4,0,0" TextTrimming="CharacterEllipsis" />
+                                <TextBlock Text="SOURCE / ROLE" Style="{StaticResource DashKpiLabel}" Margin="0,6,0,0" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- §2 INFRASTRUCTURE HEALTH MAP -->
+            <TextBlock Text="INFRASTRUCTURE HEALTH MAP" Style="{StaticResource DashKpiLabel}" Margin="0,0,0,10" />
+            <ItemsControl x:Name="V2InfraMapList" Margin="0,0,0,20">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <!-- §3 AI RISK DISTRIBUTION -->
+            <TextBlock Text="AI RISK DISTRIBUTION" Style="{StaticResource DashKpiLabel}" Margin="0,0,0,10" />
+            <Border Style="{StaticResource DashAiWidget}" Padding="16" Margin="0,0,0,12">
+                <StackPanel>
+                    <Grid x:Name="V2RiskDistBars" Height="12" Margin="0,0,0,12" />
+                    <UniformGrid Columns="4" Margin="0,0,0,8">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Ellipse Width="8" Height="8" Fill="#F97316" Margin="0,0,6,0" />
+                            <TextBlock x:Name="V2CriticalCountText" Text="Critical 0" Foreground="#94A3B8" FontSize="10" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Ellipse Width="8" Height="8" Fill="#F59E0B" Margin="0,0,6,0" />
+                            <TextBlock x:Name="V2HighCountText" Text="High 0" Foreground="#94A3B8" FontSize="10" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Ellipse Width="8" Height="8" Fill="#94A3B8" Margin="0,0,6,0" />
+                            <TextBlock x:Name="V2MediumCountText" Text="Medium 0" Foreground="#94A3B8" FontSize="10" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Ellipse Width="8" Height="8" Fill="#64748B" Margin="0,0,6,0" />
+                            <TextBlock x:Name="V2LowCountText" Text="Low 0" Foreground="#94A3B8" FontSize="10" />
+                        </StackPanel>
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+            <ItemsControl x:Name="V2RiskDetailsList" Margin="0,0,0,20">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <!-- §4 WHAT CHANGED -->
+            <TextBlock Text="WHAT CHANGED" Style="{StaticResource DashKpiLabel}" Margin="0,0,0,10" />
+            <ItemsControl x:Name="V2ChangesList" Margin="0,0,0,20">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="4" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <!-- §5 TIMELINE -->
+            <TextBlock Text="EVENT TIMELINE" Style="{StaticResource DashKpiLabel}" Margin="0,0,0,10" />
+            <Border Style="{StaticResource DashAiWidget}" Padding="16" Margin="0,0,0,20">
+                <ItemsControl x:Name="V2TimelineList" />
+            </Border>
+
+            <!-- §6 AI REASONING PIPELINE -->
+            <TextBlock Text="AI REASONING" Style="{StaticResource DashKpiLabel}" Margin="0,0,0,10" />
+            <ItemsControl x:Name="V2ReasoningList" Margin="0,0,0,20">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <!-- §7 BUSINESS IMPACT -->
+            <TextBlock Text="BUSINESS IMPACT" Style="{StaticResource DashKpiLabel}" Margin="0,0,0,10" />
+            <ItemsControl x:Name="V2BusinessImpactList" Margin="0,0,0,20">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate><UniformGrid Columns="4" /></ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <!-- §8 ACTION CENTER -->
+            <TextBlock Text="ACTION CENTER" Style="{StaticResource DashKpiLabel}" Margin="0,0,0,10" />
+            <ItemsControl x:Name="V2ActionCenterList" Margin="0,0,0,20">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <!-- §9 AI PREDICTION -->
+            <TextBlock Text="AI PREDICTION" Style="{StaticResource DashKpiLabel}" Margin="0,0,0,10" />
+            <ItemsControl x:Name="V2PredictionsList" Margin="0,0,0,20">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <!-- §10 LIVE INFRASTRUCTURE INSIGHTS -->
+            <TextBlock Text="LIVE INFRASTRUCTURE INSIGHTS" Style="{StaticResource DashKpiLabel}" Margin="0,0,0,10" />
+            <ItemsControl x:Name="V2LiveInsightsList" Margin="0,0,0,20">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <!-- §11 TREND SPARKLINES -->
+            <TextBlock Text="TREND VISUALIZATION" Style="{StaticResource DashKpiLabel}" Margin="0,0,0,10" />
+            <ItemsControl x:Name="V2SparklinesList" Margin="0,0,0,20">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <!-- §12 REPORT CENTER -->
+            <TextBlock Text="REPORT CENTER" Style="{StaticResource DashKpiLabel}" Margin="0,0,0,10" />
+            <WrapPanel Margin="0,0,0,20">
+                <Button Style="{StaticResource FilterTabButton}" Content="Generate PDF" Padding="14,8" Margin="0,0,8,8" IsEnabled="False" Opacity="0.65" ToolTip="Premium — coming soon" />
+                <Button Style="{StaticResource FilterTabButton}" Content="Share Report" Padding="14,8" Margin="0,0,8,8" IsEnabled="False" Opacity="0.65" ToolTip="Premium — coming soon" />
+                <Button Style="{StaticResource FilterTabButton}" Content="Email Report" Padding="14,8" Margin="0,0,8,8" IsEnabled="False" Opacity="0.65" ToolTip="Premium — coming soon" />
+                <Button Style="{StaticResource FilterTabButton}" Content="Create Ticket" Padding="14,8" Margin="0,0,8,8" IsEnabled="False" Opacity="0.65" ToolTip="Premium — coming soon" />
+                <Button Style="{StaticResource FilterTabButton}" Content="Copy Summary" Padding="14,8" Margin="0,0,8,8" IsEnabled="False" Opacity="0.65" ToolTip="Premium — coming soon" />
+                <Button Style="{StaticResource FilterTabButton}" Content="Schedule Weekly Report" Padding="14,8" Margin="0,0,8,8" IsEnabled="False" Opacity="0.65" ToolTip="Premium — coming soon" />
+            </WrapPanel>
+
+            <!-- §13 PREMIUM+ PREVIEW -->
+            <Grid>
+                <Border CornerRadius="16" Background="#0A1020" BorderBrush="#334155" BorderThickness="1" Padding="20">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                            <TextBlock Text="&#xE7C3;" FontFamily="Segoe MDL2 Assets" Foreground="#A78BFA" FontSize="18" Margin="0,0,10,0" />
+                            <TextBlock Text="PREMIUM+ ROADMAP" Foreground="#C4B5FD" FontSize="12" FontWeight="Bold" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <UniformGrid Columns="2">
+                            <Border Style="{StaticResource DashMiniKpiCard}" Margin="0,0,8,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE722;" FontFamily="Segoe MDL2 Assets" Foreground="#64748B" FontSize="14" Margin="0,0,8,0" />
+                                    <TextBlock Text="Live Screen Reading" Foreground="#7B8AA3" FontSize="11" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource DashMiniKpiCard}" Margin="8,0,0,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE945;" FontFamily="Segoe MDL2 Assets" Foreground="#64748B" FontSize="14" Margin="0,0,8,0" />
+                                    <TextBlock Text="Visual Guidance" Foreground="#7B8AA3" FontSize="11" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource DashMiniKpiCard}" Margin="0,0,8,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE735;" FontFamily="Segoe MDL2 Assets" Foreground="#64748B" FontSize="14" Margin="0,0,8,0" />
+                                    <TextBlock Text="Step-by-step Assistant" Foreground="#7B8AA3" FontSize="11" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource DashMiniKpiCard}" Margin="8,0,0,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE774;" FontFamily="Segoe MDL2 Assets" Foreground="#64748B" FontSize="14" Margin="0,0,8,0" />
+                                    <TextBlock Text="Context Aware AI" Foreground="#7B8AA3" FontSize="11" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource DashMiniKpiCard}" Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE897;" FontFamily="Segoe MDL2 Assets" Foreground="#64748B" FontSize="14" Margin="0,0,8,0" />
+                                    <TextBlock Text="Interactive Help" Foreground="#7B8AA3" FontSize="11" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource DashMiniKpiCard}" Margin="8,0,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xE8A5;" FontFamily="Segoe MDL2 Assets" Foreground="#64748B" FontSize="14" Margin="0,0,8,0" />
+                                    <TextBlock Text="Workflow Detection" Foreground="#7B8AA3" FontSize="11" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Border>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+                <licensing:PremiumLockOverlay x:Name="PremiumPlusSectionLock" Visibility="Collapsed" LockMode="PremiumPlusExclusive" Panel.ZIndex="10" />
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

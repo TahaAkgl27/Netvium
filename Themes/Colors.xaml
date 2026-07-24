@@ -1,0 +1,67 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- V3 Design Tokens -->
+    <Color x:Key="BackgroundColor">#0B0F17</Color>
+    <Color x:Key="CardColor">#121826</Color>
+    <Color x:Key="AccentColor">#3B82F6</Color>
+    <Color x:Key="PurpleColor">#7C3AED</Color>
+    <Color x:Key="GreenColor">#22C55E</Color>
+    <Color x:Key="YellowColor">#F59E0B</Color>
+    <Color x:Key="RedColor">#EF4444</Color>
+    <Color x:Key="BorderColor">#0FFFFFFF</Color>
+    <Color x:Key="MutedColor">#8B93A7</Color>
+    <Color x:Key="TextPrimaryColor">#E8ECF4</Color>
+    <Color x:Key="SurfaceColor">#0E1420</Color>
+    <Color x:Key="SidebarColor">#0D1119</Color>
+    <Color x:Key="TopBarColor">#0A0E16</Color>
+    <Color x:Key="HoverColor">#1A243C</Color>
+    <Color x:Key="SelectionColor">#263659</Color>
+    <Color x:Key="TrackColor">#1C2433</Color>
+
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource BackgroundColor}" />
+    <SolidColorBrush x:Key="CardBackgroundBrush" Color="{StaticResource CardColor}" />
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource AccentColor}" />
+    <SolidColorBrush x:Key="PurpleBrush" Color="{StaticResource PurpleColor}" />
+    <SolidColorBrush x:Key="GreenBrush" Color="{StaticResource GreenColor}" />
+    <SolidColorBrush x:Key="YellowBrush" Color="{StaticResource YellowColor}" />
+    <SolidColorBrush x:Key="RedBrush" Color="{StaticResource RedColor}" />
+    <SolidColorBrush x:Key="BorderBrushDark" Color="{StaticResource BorderColor}" />
+    <SolidColorBrush x:Key="MutedTextBrush" Color="{StaticResource MutedColor}" />
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimaryColor}" />
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}" />
+    <SolidColorBrush x:Key="SidebarBrush" Color="{StaticResource SidebarColor}" />
+    <SolidColorBrush x:Key="TopBarBrush" Color="{StaticResource TopBarColor}" />
+    <SolidColorBrush x:Key="HoverBrush" Color="{StaticResource HoverColor}" />
+    <SolidColorBrush x:Key="SelectionBrush" Color="{StaticResource SelectionColor}" />
+    <SolidColorBrush x:Key="TrackBrush" Color="{StaticResource TrackColor}" />
+    <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="#151C28" />
+    <SolidColorBrush x:Key="AccentSoftBrush" Color="#1A2744" />
+    <SolidColorBrush x:Key="Card2Brush" Color="{StaticResource CardColor}" />
+    <SolidColorBrush x:Key="Card3Brush" Color="{StaticResource SurfaceColor}" />
+
+    <!-- Background gradient -->
+    <LinearGradientBrush x:Key="AppBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#0B0F17" Offset="0" />
+        <GradientStop Color="#0D1220" Offset="0.5" />
+        <GradientStop Color="#0A0E18" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- Premium gradient -->
+    <LinearGradientBrush x:Key="PremiumGradientBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#7C3AED" Offset="0" />
+        <GradientStop Color="#3B82F6" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="PrimaryGradientBrush" StartPoint="0,0" EndPoint="1,0">
+        <GradientStop Color="#3B82F6" Offset="0" />
+        <GradientStop Color="#6366F1" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- Glass card -->
+    <LinearGradientBrush x:Key="GlassCardBrush" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#18FFFFFF" Offset="0" />
+        <GradientStop Color="#08FFFFFF" Offset="1" />
+    </LinearGradientBrush>
+
+</ResourceDictionary>

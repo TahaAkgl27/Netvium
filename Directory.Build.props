@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <!-- Single release version source. Build scripts may override Version/VersionPrefix explicitly. -->
+    <VersionPrefix Condition="'$(VersionPrefix)' == ''">1.0.0</VersionPrefix>
+    <Version Condition="'$(Version)' == ''">$(VersionPrefix)</Version>
+    <VersionPrefix Condition="'$(Version)' != ''">$([System.Text.RegularExpressions.Regex]::Replace('$(Version)', '-.*$', ''))</VersionPrefix>
+    <AssemblyVersion Condition="'$(AssemblyVersion)' == ''">$(VersionPrefix).0</AssemblyVersion>
+    <FileVersion Condition="'$(FileVersion)' == ''">$(VersionPrefix).0</FileVersion>
+    <InformationalVersion Condition="'$(InformationalVersion)' == ''">$(Version)</InformationalVersion>
+  </PropertyGroup>
+</Project>

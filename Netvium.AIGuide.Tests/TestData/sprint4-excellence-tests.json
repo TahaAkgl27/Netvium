@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "evidenceTests": [
+    {
+      "name": "folder-permission-builds-evidence",
+      "userQuestion": "D:\\Shared\\IT klasörüne ahmet için read ver",
+      "screenKind": "FileExplorer",
+      "activeWindowTitle": "File Explorer",
+      "ocrStatusBar": "D:\\Shared",
+      "selectedListItem": "IT",
+      "expectMinEvidenceCount": 4,
+      "expectGoal": "GrantPermission"
+    }
+  ],
+  "goalTests": [
+    {
+      "name": "troubleshoot-permission-goal",
+      "userQuestion": "IT klasörü izin sorunu var çalışmıyor",
+      "screenKind": "FileExplorer",
+      "activeWindowTitle": "File Explorer",
+      "expectGoal": "TroubleshootPermission"
+    },
+    {
+      "name": "audit-permission-goal",
+      "userQuestion": "IT klasörü NTFS izinlerini denetlemek istiyorum",
+      "screenKind": "FileExplorer",
+      "activeWindowTitle": "File Explorer",
+      "expectGoal": "AuditPermission"
+    }
+  ],
+  "clarificationTests": [
+    {
+      "name": "sequential-folder-first",
+      "userQuestion": "Klasöre izin vereceğim",
+      "screenKind": "FileExplorer",
+      "activeWindowTitle": "File Explorer",
+      "expectShouldAskQuestion": true,
+      "expectSingleMissingField": true,
+      "expectQuestionContains": "klasör"
+    },
+    {
+      "name": "sequential-user-second",
+      "userQuestion": "D:\\Shared\\IT klasörüne izin vereceğim",
+      "screenKind": "FileExplorer",
+      "activeWindowTitle": "File Explorer",
+      "ocrStatusBar": "D:\\Shared\\IT",
+      "expectShouldAskQuestion": true,
+      "expectMissingFieldCount": 1,
+      "expectQuestionContains": "kullanıcı"
+    }
+  ],
+  "reliabilityTests": [
+    {
+      "name": "hidden-target-low-reliability",
+      "userQuestion": "D:\\Hidden\\Secret klasörüne ahmet için read ver",
+      "screenKind": "FileExplorer",
+      "activeWindowTitle": "File Explorer",
+      "ocrStatusBar": "D:\\Shared",
+      "expectMaxReliability": 70
+    }
+  ],
+  "verificationTests": [
+    {
+      "name": "verification-runs",
+      "userQuestion": "D:\\Shared\\IT klasörüne ahmet için read ver",
+      "screenKind": "FileExplorer",
+      "activeWindowTitle": "File Explorer",
+      "ocrStatusBar": "D:\\Shared",
+      "selectedListItem": "IT",
+      "expectVerificationPresent": true,
+      "expectMinEvidenceCount": 3
+    }
+  ]
+}

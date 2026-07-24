@@ -1,0 +1,236 @@
+{
+  "version": 1,
+  "workflows": [
+    {
+      "id": "folder-permission",
+      "intents": ["FolderPermission"],
+      "defaultTotalSteps": 8,
+      "totalStepsByScreen": { "ServerManager": 3 },
+      "observations": {
+        "serverManagerWithTarget": {
+          "en": "{{folder}} is not visible in Server Manager — use File Explorer for NTFS.",
+          "tr": "{{folder}} klasörü şu an ekranda görünmüyor. NTFS için File Explorer kullanın."
+        },
+        "serverManagerGeneric": {
+          "en": "Server Manager shows shares, not NTFS subfolder ACLs.",
+          "tr": "Server Manager paylaşımları gösterir; NTFS alt klasör ACL'lerini değil."
+        },
+        "targetVisible": {
+          "en": "Target folder {{folder}} appears on screen.",
+          "tr": "Hedef klasör {{folder}} ekranda görünüyor."
+        },
+        "targetHiddenWithPath": {
+          "en": "{{folder}} is not visible on screen — navigate first.",
+          "tr": "{{folder}} klasörü şu an ekranda görünmüyor."
+        },
+        "targetHiddenNoPath": {
+          "en": "Specify folder path; do not assume selected item is the target.",
+          "tr": "Klasör yolunu belirtin; seçili öğeyi hedef sanmayın."
+        }
+      },
+      "steps": [
+        {
+          "id": "sm-redirect",
+          "condition": "screen_is_server_manager",
+          "instruction": {
+            "en": "NTFS subfolder permissions are not set in Server Manager. Open {{path}} in File Explorer.",
+            "tr": "NTFS alt klasör izni Server Manager'da verilmez. File Explorer'da {{path}} yoluna gidin."
+          }
+        },
+        {
+          "id": "navigate",
+          "condition": "has_path_and_not_target_visible",
+          "instruction": {
+            "en": "Type {{path}} in the address bar and press Enter.",
+            "tr": "Adres çubuğuna {{path}} yaz ve Enter'a bas."
+          }
+        },
+        {
+          "id": "navigate-unknown",
+          "condition": "no_path",
+          "instruction": {
+            "en": "First type the target folder path in the File Explorer address bar.",
+            "tr": "Önce File Explorer'da adres çubuğuna hedef klasör yolunu yaz."
+          }
+        },
+        {
+          "id": "right-click-properties",
+          "condition": "target_visible",
+          "instruction": {
+            "en": "Right-click the {{folder}} folder and choose Properties.",
+            "tr": "{{folder}} klasörüne sağ tıkla ve Properties / Özellikler seç."
+          }
+        }
+      ]
+    },
+    {
+      "id": "active-directory",
+      "intents": ["PasswordReset", "UnlockUser", "UserManagement", "GroupMembership"],
+      "defaultTotalSteps": 3,
+      "observations": {
+        "onCorrectScreen": { "en": "AD Users and Computers is open.", "tr": "AD Users and Computers açık." },
+        "wrongScreen": { "en": "Open AD Users and Computers first.", "tr": "Önce AD Users and Computers açın." }
+      },
+      "steps": [
+        { "id": "reset", "condition": "intent_password_reset", "instruction": { "en": "Right-click > Reset Password.", "tr": "Sağ tık > Reset Password." } },
+        { "id": "unlock", "condition": "intent_unlock", "instruction": { "en": "Properties > Account > Unlock account, or right-click > Unlock.", "tr": "Properties > Account > Unlock account veya sağ tık > Unlock." } },
+        { "id": "members", "condition": "intent_group", "instruction": { "en": "Properties > Member Of / Members > Add.", "tr": "Properties > Member Of / Members > Add." } },
+        { "id": "action", "condition": "intent_user_management", "instruction": { "en": "Apply the requested account action.", "tr": "İstenen hesap işlemini uygulayın." } },
+        { "id": "find-user", "condition": "intent_password_or_unlock", "instruction": { "en": "Find the target user.", "tr": "Hedef kullanıcıyı bulun." } },
+        { "id": "open-aduc", "condition": "always", "instruction": { "en": "Open Active Directory Users and Computers.", "tr": "Active Directory Users and Computers açın." } }
+      ]
+    },
+    {
+      "id": "dhcp",
+      "intents": ["DhcpReservation", "IpConflictPrevention", "DhcpManagement"],
+      "defaultTotalSteps": 4,
+      "observations": {
+        "onCorrectScreen": { "en": "DHCP Manager is visible.", "tr": "DHCP Manager görünüyor." },
+        "wrongScreen": { "en": "Open DHCP Manager.", "tr": "DHCP Manager açın." }
+      },
+      "steps": [
+        { "id": "reservation", "condition": "intent_dhcp_reservation", "instruction": { "en": "IPv4 > Scope > Reservations > New Reservation. Enter MAC and IP{{ipHint}}.", "tr": "IPv4 > Scope > Reservations > New Reservation. MAC ve IP gir{{ipHint}}." } },
+        { "id": "conflict", "condition": "intent_ip_conflict", "instruction": { "en": "Review scope leases and address pool for conflicts.", "tr": "Scope lease ve address pool'da çakışmayı kontrol edin." } },
+        { "id": "manage", "condition": "always", "instruction": { "en": "Navigate the DHCP tree to the relevant scope or option.", "tr": "DHCP ağacında ilgili scope veya seçeneğe gidin." } }
+      ]
+    },
+    {
+      "id": "dns",
+      "intents": ["DnsRecordCreation", "DnsManagement"],
+      "defaultTotalSteps": 4,
+      "observations": {
+        "onCorrectScreen": { "en": "DNS Manager is open.", "tr": "DNS Manager açık." },
+        "wrongScreen": { "en": "Open DNS Manager.", "tr": "DNS Manager açın." }
+      },
+      "steps": [
+        { "id": "record", "condition": "intent_dns_record", "instruction": { "en": "Select zone > New Host (A/AAAA) or New Pointer (PTR) or MX as needed.", "tr": "Zone seç > New Host (A/AAAA) veya New Pointer (PTR) veya MX oluştur." } },
+        { "id": "manage", "condition": "always", "instruction": { "en": "Navigate to the relevant forward/reverse zone.", "tr": "İlgili forward/reverse zone'a gidin." } }
+      ]
+    },
+    {
+      "id": "iis",
+      "intents": ["IisBindingOrAppPool"],
+      "defaultTotalSteps": 4,
+      "observations": {
+        "onCorrectScreen": { "en": "IIS Manager is open.", "tr": "IIS Manager açık." },
+        "wrongScreen": { "en": "Open IIS Manager.", "tr": "IIS Manager açın." }
+      },
+      "steps": [
+        { "id": "binding", "condition": "always", "instruction": { "en": "Select site or Application Pool and open Bindings or Advanced Settings.", "tr": "Site veya Application Pool seç, Bindings veya Advanced Settings aç." } }
+      ]
+    },
+    {
+      "id": "event-viewer",
+      "intents": ["EventLogReview", "EventId1074Analysis"],
+      "defaultTotalSteps": 3,
+      "observations": {
+        "event1074": { "en": "Event 1074 indicates a planned restart/shutdown.", "tr": "Event 1074 planlı yeniden başlatma/kapatma anlamına gelir." },
+        "onCorrectScreen": { "en": "Event Viewer is open.", "tr": "Event Viewer açık." },
+        "wrongScreen": { "en": "Open Event Viewer.", "tr": "Event Viewer açın." }
+      },
+      "steps": [
+        { "id": "1074", "condition": "intent_event_1074", "instruction": { "en": "Windows Logs > System. Filter Event ID 1074 and review details.", "tr": "Windows Logs > System. Event ID 1074 filtrele ve detayları incele." } },
+        { "id": "generic", "condition": "always", "instruction": { "en": "Select the relevant log and review the selected event.", "tr": "İlgili log'u seç ve olayı incele." } }
+      ]
+    },
+    {
+      "id": "generic",
+      "intents": [],
+      "defaultTotalSteps": 1,
+      "observations": {
+        "default": { "en": "Review the visible screen and state your goal clearly.", "tr": "Görünen ekranı inceleyin ve hedefinizi net belirtin." }
+      },
+      "steps": [
+        { "id": "describe-goal", "condition": "always", "instruction": { "en": "Describe what you want to accomplish on this screen.", "tr": "Bu ekranda ne yapmak istediğinizi açıklayın." } }
+      ],
+      "genericStep": { "en": "Describe what you want to accomplish on this screen.", "tr": "Bu ekranda ne yapmak istediğinizi açıklayın." }
+    }
+  ],
+  "clarification": {
+    "byIntent": {
+      "FolderPermission": {
+        "requiredFields": ["TargetPathOrSelectedFolder", "TargetUser", "PermissionLevel"],
+        "fieldLabels": {
+          "folderPath": { "en": "Folder path", "tr": "Klasör yolu" },
+          "userName": { "en": "User name", "tr": "Kullanıcı adı" },
+          "permissionLevel": { "en": "Permission level", "tr": "İzin seviyesi" }
+        },
+        "questions": {
+          "missingFolderPath": { "en": "Which folder should receive this permission?", "tr": "Hangi klasöre izin vereceksin?" },
+          "missingUser": { "en": "Which user should receive this permission?", "tr": "Hangi kullanıcıya bu izni vermek istiyorsun?" },
+          "missingPermission": { "en": "Which permission level should be applied?", "tr": "Hangi izin seviyesi uygulanacak?" },
+          "missingSingle": { "en": "Please provide the {{field}}.", "tr": "{{field}} bilgisini paylaşır mısın?" }
+        }
+      },
+      "UserManagement": {
+        "requiredFields": ["TargetUser"],
+        "fieldLabels": {
+          "userName": { "en": "User name", "tr": "Kullanıcı adı" },
+          "operationType": { "en": "Operation type", "tr": "İşlem türü" }
+        },
+        "triggerKeywords": {
+          "ambiguousPermission": ["kullanıcıya izin", "kullaniciya izin"]
+        },
+        "questions": {
+          "ambiguousPermission": { "en": "Which user and which operation do you want to perform?", "tr": "Hangi kullanıcı için hangi işlemi yapmak istiyorsun?" },
+          "missingUser": { "en": "Which user should this operation apply to?", "tr": "Hangi kullanıcı için bu işlemi yapmak istiyorsun?" }
+        },
+        "skipWhenKeywords": ["proxy", "upn", "disable", "enable", "ou", "taşı", "tasi", "oluştur", "olustur", "sil"]
+      },
+      "PasswordReset": {
+        "requiredFields": ["TargetUser"],
+        "fieldLabels": { "userName": { "en": "User name", "tr": "Kullanıcı adı" } },
+        "questions": { "missingUser": { "en": "Which user should this operation apply to?", "tr": "Hangi kullanıcı için bu işlemi yapmak istiyorsun?" } },
+        "skipWhenKeywords": ["şifre", "sifre", "password", "parola"]
+      },
+      "UnlockUser": {
+        "requiredFields": ["TargetUser"],
+        "fieldLabels": { "userName": { "en": "User name", "tr": "Kullanıcı adı" } },
+        "questions": { "missingUser": { "en": "Which user should this operation apply to?", "tr": "Hangi kullanıcı için bu işlemi yapmak istiyorsun?" } },
+        "skipWhenKeywords": ["kilidi", "unlock", "kilit"]
+      },
+      "GroupMembership": {
+        "requiredFields": ["TargetUser"],
+        "fieldLabels": { "userName": { "en": "User name", "tr": "Kullanıcı adı" } },
+        "questions": { "missingUser": { "en": "Which user should this operation apply to?", "tr": "Hangi kullanıcı için bu işlemi yapmak istiyorsun?" } }
+      },
+      "DhcpReservation": {
+        "requiredFields": ["IpAddress", "MacAddress"],
+        "fieldLabels": {
+          "ipAddress": { "en": "IP address", "tr": "IP adresi" },
+          "macAddress": { "en": "MAC address", "tr": "MAC adresi" }
+        },
+        "questions": {
+          "missingIp": { "en": "What IP address should be reserved?", "tr": "Hangi IP adresi rezerve edilecek?" },
+          "missingMac": { "en": "What MAC address should be used for the reservation?", "tr": "Rezervasyon için MAC adresi nedir?" },
+          "missingBoth": { "en": "Please provide the IP and MAC address for the reservation.", "tr": "Rezervasyon için IP ve MAC adresini paylaşır mısın?" }
+        }
+      },
+      "DnsRecordCreation": {
+        "requiredFields": ["RecordNameOrValue"],
+        "fieldLabels": { "recordValue": { "en": "Record name or IP/value", "tr": "Kayıt adı veya IP/değer" } },
+        "questions": {
+          "missingValue": { "en": "What record name and IP/value should be used?", "tr": "Hangi kayıt adı ve hangi IP/değer ile oluşturulacak?" }
+        }
+      },
+      "IisBindingOrAppPool": {
+        "requiredFields": ["SiteName"],
+        "fieldLabels": { "siteName": { "en": "Site name", "tr": "Site adı" } },
+        "triggerKeywords": {
+          "missingSite": ["binding", "site"]
+        },
+        "questions": {
+          "missingSite": { "en": "Which site should the binding be configured for?", "tr": "Hangi site için binding ayarlamak istiyorsun?" }
+        },
+        "skipWhenKeywords": ["yeni site", "new site"]
+      }
+    }
+  },
+  "wrongObject": {
+    "message": {
+      "en": "Current selection ({{selected}}) does not match target. Expected: {{expected}}.",
+      "tr": "Şu an seçili öğe ({{selected}}) hedefle uyuşmuyor. Hedef: {{expected}}."
+    },
+    "fileExtensions": [".exe", ".txt", ".dll", ".bat"]
+  }
+}

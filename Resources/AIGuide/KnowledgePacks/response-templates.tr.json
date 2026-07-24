@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "sections": {
+    "currentScreen": { "en": "Current screen:", "tr": "Geçerli ekran:" },
+    "understoodGoal": { "en": "Understood goal:", "tr": "Anladığım hedef:" },
+    "understood": { "en": "Understood:", "tr": "Anladığım:" },
+    "onScreenObservation": { "en": "On-screen observation:", "tr": "Ekranda gördüğüm durum:" },
+    "visibleEvidence": { "en": "Visible evidence:", "tr": "Görünen kanıt:" },
+    "doThisNow": { "en": "Do this now:", "tr": "Şimdi yap:" },
+    "missingInformation": { "en": "Missing information:", "tr": "Eksik bilgi:" },
+    "toContinue": { "en": "To continue:", "tr": "Devam etmek için:" },
+    "confidence": { "en": "Confidence:", "tr": "Güven:" },
+    "attention": { "en": "Attention:", "tr": "Dikkat:" },
+    "notSpecified": { "en": "(not specified)", "tr": "(belirtilmedi)" },
+    "clarificationNeeded": { "en": "Additional information is required to continue.", "tr": "Devam etmek için ek bilgi gerekiyor." }
+  },
+  "intentLabels": {
+    "FolderPermission": { "en": "Folder permission", "tr": "Klasör izni verme" },
+    "PasswordReset": { "en": "Password reset", "tr": "Şifre sıfırlama" },
+    "UnlockUser": { "en": "Unlock account", "tr": "Hesap kilidi açma" },
+    "UserManagement": { "en": "User management", "tr": "Kullanıcı yönetimi" },
+    "GroupMembership": { "en": "Group membership", "tr": "Grup üyeliği" },
+    "DhcpReservation": { "en": "DHCP reservation", "tr": "DHCP rezervasyonu" },
+    "DnsRecordCreation": { "en": "DNS record creation", "tr": "DNS kaydı oluşturma" },
+    "IisBindingOrAppPool": { "en": "IIS binding / app pool", "tr": "IIS binding / app pool" },
+    "EventLogReview": { "en": "Event log review", "tr": "Event log inceleme" },
+    "EventId1074Analysis": { "en": "Event 1074 analysis", "tr": "Event 1074 analizi" }
+  },
+  "goalTemplates": {
+    "FolderPermissionWithPath": {
+      "en": "Grant {{permissionLevel}} to {{userName}} on {{path}}.",
+      "tr": "{{path}} klasöründe {{userName}} kullanıcısına {{permissionLevel}} izni vermek."
+    },
+    "PasswordReset": { "en": "Reset user password.", "tr": "Kullanıcı şifresini sıfırlamak." },
+    "UnlockUser": { "en": "Unlock user account.", "tr": "Kullanıcı hesabının kilidini açmak." },
+    "DhcpReservation": { "en": "Create DHCP reservation.", "tr": "DHCP rezervasyonu oluşturmak." },
+    "DnsRecordCreation": { "en": "Create DNS record.", "tr": "DNS kaydı oluşturmak." },
+    "IisBindingOrAppPool": { "en": "IIS binding or application pool operation.", "tr": "IIS binding veya application pool işlemi." },
+    "EventLogReview": { "en": "Review event log entry.", "tr": "Event log kaydını incelemek." },
+    "Generic": { "en": "{{intent}} operation.", "tr": "{{intent}} işlemi." }
+  },
+  "wrongScreenTemplate": {
+    "en": "{{currentScreen}}\n{{screenName}}\n\n{{understoodGoal}}\n{{goal}}\n\n{{onScreenObservation}}\n{{observation}}\n{{attentionBlock}}\n\n{{doThisNow}}\n{{steps}}\n\n{{confidence}}\n{{confidenceLabel}}",
+    "tr": "{{currentScreen}}\n{{screenName}}\n\n{{understoodGoal}}\n{{goal}}\n\n{{onScreenObservation}}\n{{observation}}\n{{attentionBlock}}\n\n{{doThisNow}}\n{{steps}}\n\n{{confidence}}\n{{confidenceLabel}}"
+  },
+  "structuredTemplate": {
+    "en": "{{currentScreen}}\n{{screenName}}\n\n{{understoodGoal}}\n{{goal}}\n\n{{onScreenObservation}}\n{{observation}}\n{{evidenceBlock}}\n{{attentionBlock}}\n\n{{doThisNow}}\n{{steps}}\n\n{{confidence}}\n{{confidenceLabel}}",
+    "tr": "{{currentScreen}}\n{{screenName}}\n\n{{understoodGoal}}\n{{goal}}\n\n{{onScreenObservation}}\n{{observation}}\n{{evidenceBlock}}\n{{attentionBlock}}\n\n{{doThisNow}}\n{{steps}}\n\n{{confidence}}\n{{confidenceLabel}}"
+  },
+  "clarificationTemplate": {
+    "en": "{{currentScreen}}\n{{screenName}}\n\n{{understood}}\n{{intentLabel}}\n\n{{missingInformation}}\n{{missingFields}}\n\n{{toContinue}}\n{{question}}\n\n{{confidence}}\n{{confidenceLabel}}",
+    "tr": "{{currentScreen}}\n{{screenName}}\n\n{{understood}}\n{{intentLabel}}\n\n{{missingInformation}}\n{{missingFields}}\n\n{{toContinue}}\n{{question}}\n\n{{confidence}}\n{{confidenceLabel}}"
+  }
+}

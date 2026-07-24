@@ -1,0 +1,68 @@
+<UserControl x:Class="Netvium.Views.Dashboard.AddWidgetPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="320"
+             Visibility="Collapsed"
+             Panel.ZIndex="40">
+    <Border Background="#121A2B"
+            BorderBrush="#1E2A3F"
+            BorderThickness="1,0,0,0"
+            CornerRadius="14,0,0,14">
+        <Grid Margin="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0" Margin="0,0,0,10">
+                <Button DockPanel.Dock="Right"
+                        Style="{StaticResource DashWidgetChromeButton}"
+                        Content="&#xE8BB;"
+                        Click="OnCloseClick" />
+                <TextBlock Text="Add Widget" Style="{StaticResource DashSectionTitle}" />
+            </DockPanel>
+            <TextBox x:Name="SearchBox"
+                     Grid.Row="1"
+                     Style="{StaticResource SearchBox}"
+                     Height="34"
+                     Margin="0,0,0,10"
+                     TextChanged="OnSearchChanged"
+                     Tag="Search widgets..." />
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="CatalogItems">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,0,0,12">
+                                <TextBlock Text="{Binding Category}" Foreground="#6B7A94" FontSize="10" FontWeight="SemiBold" Margin="0,0,0,6" />
+                                <ItemsControl ItemsSource="{Binding Items}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Style="{StaticResource DashWidgetCatalogButton}"
+                                                    Tag="{Binding Type}"
+                                                    Click="OnWidgetPickClick"
+                                                    Margin="0,0,0,6">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Border Width="30" Height="30" CornerRadius="8" Background="#0E1524" BorderBrush="#1E2A3F" BorderThickness="1" Margin="0,0,8,0">
+                                                        <TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="12" Foreground="#4F8CFF" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                    </Border>
+                                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Title}" Foreground="#E8EDF5" FontSize="11" FontWeight="SemiBold" />
+                                                        <TextBlock Text="{Binding Description}" Foreground="#6B7A94" FontSize="9" TextTrimming="CharacterEllipsis" />
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>

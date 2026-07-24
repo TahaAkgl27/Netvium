@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "domain": "active-directory",
+  "entries": [
+    {
+      "id": "ad-user-operations",
+      "priority": 100,
+      "match": {
+        "intents": ["PasswordReset", "UnlockUser", "UserManagement", "GroupMembership"],
+        "goals": ["ResetPassword", "UnlockAccount", "ManageGroupMembership"],
+        "workflows": ["active-directory"],
+        "screens": ["ActiveDirectoryUsersAndComputers"]
+      },
+      "commonMistakes": [
+        {
+          "tr": "Yanlis OU'da islem yapmak, disabled kullanicida sifre reset sonrasi login beklemek ve locked user ile expired password karistirmak yaygindir.",
+          "en": "Working in the wrong OU, expecting login after reset on a disabled account, and confusing locked vs expired password are common."
+        }
+      ],
+      "verificationChecks": [
+        {
+          "tr": "Account sekmesi, Member Of, Attribute Editor, replication ve effective group membership kontrol et.",
+          "en": "Check Account tab, Member Of, Attribute Editor, replication, and effective group membership."
+        }
+      ],
+      "expertTips": [
+        {
+          "tr": "Group membership replikasyon gecikmesi ve UPN/mail/proxyAddress karisikligi sik sorun kaynagidir.",
+          "en": "Group membership replication delay and UPN/mail/proxyAddress confusion are frequent root causes."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,272 @@
+<Window x:Class="Netvium.Views.Licensing.PlansWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Netvium Plans"
+        Width="1120"
+        Height="820"
+        MinWidth="960"
+        MinHeight="720"
+        WindowStartupLocation="CenterOwner"
+        Background="{StaticResource BackgroundBrush}"
+        WindowStyle="None"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style x:Key="PlanCardBorder" TargetType="Border">
+            <Setter Property="CornerRadius" Value="16" />
+            <Setter Property="Background" Value="#0B1322" />
+            <Setter Property="BorderBrush" Value="#26354C" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="24" />
+        </Style>
+        <Style x:Key="PlanBadge" TargetType="Border">
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Margin" Value="0,0,0,12" />
+        </Style>
+        <Style x:Key="PlanFeatureRow" TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+        </Style>
+        <Style x:Key="PlanFeatureIcon" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Width" Value="18" />
+            <Setter Property="Margin" Value="0,1,8,0" />
+        </Style>
+        <Style x:Key="PlanFeatureText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="#CBD5E1" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style x:Key="PlanUpgradeButton" TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="Padding" Value="0,12" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Margin" Value="0,16,0,0" />
+            <Setter Property="MinHeight" Value="44" />
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="38" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="#0A101A" BorderBrush="#1E293B" BorderThickness="0,0,0,1"
+                MouseLeftButtonDown="OnTitleBarMouseLeftButtonDown">
+            <Grid Margin="14,0,8,0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="&#xE735;" FontFamily="Segoe MDL2 Assets" Foreground="#A78BFA" FontSize="13" Margin="0,0,8,0" />
+                    <TextBlock Text="Netvium Plans" Foreground="#CBD5E1" FontSize="12" FontWeight="SemiBold" />
+                </StackPanel>
+                <Button HorizontalAlignment="Right" VerticalAlignment="Center" Width="28" Height="26"
+                        Background="Transparent" BorderThickness="0" Foreground="#94A3B8"
+                        Content="&#xE8BB;" FontFamily="Segoe MDL2 Assets" Click="OnCloseClick" ToolTip="Kapat" />
+            </Grid>
+        </Border>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <Grid Margin="32,28,32,36">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.Row="0" Margin="0,0,0,28">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="&#xE735;" FontFamily="Segoe MDL2 Assets" FontSize="22" Foreground="#A78BFA" Margin="0,0,12,0" VerticalAlignment="Center" />
+                        <TextBlock Text="Choose Your Plan" FontSize="28" FontWeight="SemiBold" Foreground="#F1F5F9" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock Text="AI intelligence features are licensed separately. Server management and monitoring remain available on all plans."
+                               FontSize="12" Foreground="#64748B" MaxWidth="720" TextWrapping="Wrap" />
+                </StackPanel>
+                <Button Grid.Column="1" Style="{StaticResource ModalCloseButton}" VerticalAlignment="Top" Click="OnCloseClick" />
+            </Grid>
+
+            <!-- Plan cards -->
+            <UniformGrid Grid.Row="1" Columns="3" Margin="0,0,0,32">
+
+                <!-- FREE -->
+                <Border Style="{StaticResource PlanCardBorder}" Margin="0,0,12,0">
+                    <StackPanel>
+                        <Border x:Name="FreeCurrentBadge" Style="{StaticResource PlanBadge}" Background="#122A1A" BorderBrush="#166534" BorderThickness="1" Visibility="Collapsed">
+                            <TextBlock Text="Current Plan" FontSize="10" FontWeight="Bold" Foreground="#22C55E" />
+                        </Border>
+                        <TextBlock Text="FREE" FontSize="11" FontWeight="Bold" Foreground="#22C55E" Margin="0,0,0,4" />
+                        <TextBlock Text="Essential Operations" FontSize="20" FontWeight="SemiBold" Foreground="#E8EDF5" Margin="0,0,0,4" />
+                        <TextBlock Text="Full server management and monitoring" FontSize="11" Foreground="#64748B" Margin="0,0,0,16" />
+                        <StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE73E;" Foreground="#22C55E" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Server Management" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE73E;" Foreground="#22C55E" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="RDP &amp; Remote Sessions" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE73E;" Foreground="#22C55E" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Performance Monitoring" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE73E;" Foreground="#22C55E" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Dashboard &amp; Widgets" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE73E;" Foreground="#22C55E" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Events &amp; Telemetry" />
+                            </StackPanel>
+                            <Border Height="1" Background="#1E293B" Margin="0,8,0,12" />
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE711;" Foreground="#64748B" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Foreground="#64748B" Text="AI Smart Analysis" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE711;" Foreground="#64748B" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Foreground="#64748B" Text="AI Reports" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE711;" Foreground="#64748B" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Foreground="#64748B" Text="AI Risk Engine" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- PREMIUM -->
+                <Border x:Name="PremiumCard" Style="{StaticResource PlanCardBorder}" Margin="6,0" BorderBrush="#4F46E5" Background="#0C1024"
+                        Cursor="Hand" MouseLeftButtonUp="OnPremiumCardClick">
+                    <StackPanel>
+                        <Border Style="{StaticResource PlanBadge}" Background="#1E1B4B" BorderBrush="#4338CA" BorderThickness="1">
+                            <TextBlock Text="Most Popular" FontSize="10" FontWeight="Bold" Foreground="#A5B4FC" />
+                        </Border>
+                        <Border x:Name="PremiumCurrentBadge" Style="{StaticResource PlanBadge}" Background="#1E1B4B" BorderBrush="#4338CA" BorderThickness="1" Visibility="Collapsed">
+                            <TextBlock Text="Current Plan" FontSize="10" FontWeight="Bold" Foreground="#A5B4FC" />
+                        </Border>
+                        <TextBlock Text="PREMIUM" FontSize="11" FontWeight="Bold" Foreground="#818CF8" Margin="0,0,0,4" />
+                        <TextBlock Text="AI Intelligence" FontSize="20" FontWeight="SemiBold" Foreground="#E8EDF5" Margin="0,0,0,4" />
+                        <TextBlock Text="Full AI analysis and reporting" FontSize="11" Foreground="#64748B" Margin="0,0,0,16" />
+                        <TextBlock Text="Everything in Free, plus:" FontSize="11" Foreground="#94A3B8" FontWeight="SemiBold" Margin="0,0,0,10" />
+                        <StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE73E;" Foreground="#818CF8" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="AI Smart Analysis" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE73E;" Foreground="#818CF8" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="AI Reports &amp; Export" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE73E;" Foreground="#818CF8" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="AI Risk Analysis" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE73E;" Foreground="#818CF8" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Infrastructure Intelligence" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE73E;" Foreground="#818CF8" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Predictions &amp; Recommendations" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE73E;" Foreground="#818CF8" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Report Center · PDF · Email" />
+                            </StackPanel>
+                        </StackPanel>
+                        <Button x:Name="PremiumUpgradeButton" Style="{StaticResource PlanUpgradeButton}" Content="Enter Code to Activate"
+                                PreviewMouseLeftButtonUp="OnPremiumUpgradeClick" />
+                    </StackPanel>
+                </Border>
+
+                <!-- PREMIUM+ -->
+                <Border x:Name="PremiumPlusCard" Style="{StaticResource PlanCardBorder}" Margin="12,0,0,0" BorderBrush="#92400E" Background="#0F0D0A"
+                        Cursor="Hand" MouseLeftButtonUp="OnPremiumPlusCardClick">
+                    <StackPanel>
+                        <Border Style="{StaticResource PlanBadge}" Background="#292524" BorderBrush="#92400E" BorderThickness="1">
+                            <TextBlock Text="Enterprise" FontSize="10" FontWeight="Bold" Foreground="#FBBF24" />
+                        </Border>
+                        <Border x:Name="PremiumPlusCurrentBadge" Style="{StaticResource PlanBadge}" Background="#292524" BorderBrush="#92400E" BorderThickness="1" Visibility="Collapsed">
+                            <TextBlock Text="Current Plan" FontSize="10" FontWeight="Bold" Foreground="#FBBF24" />
+                        </Border>
+                        <TextBlock Text="PREMIUM+" FontSize="11" FontWeight="Bold" Foreground="#FBBF24" Margin="0,0,0,4" />
+                        <TextBlock Text="AI Assistant" FontSize="20" FontWeight="SemiBold" Foreground="#E8EDF5" Margin="0,0,0,4" />
+                        <TextBlock Text="Next-generation guided operations" FontSize="11" Foreground="#64748B" Margin="0,0,0,16" />
+                        <TextBlock Text="Everything in Premium, plus:" FontSize="11" Foreground="#94A3B8" FontWeight="SemiBold" Margin="0,0,0,10" />
+                        <StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE946;" Foreground="#FBBF24" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Live Screen Reading" />
+                                <TextBlock Text="Coming Soon" FontSize="9" Foreground="#78716C" Margin="8,2,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE946;" Foreground="#FBBF24" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Visual AI Assistant" />
+                                <TextBlock Text="Coming Soon" FontSize="9" Foreground="#78716C" Margin="8,2,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE946;" Foreground="#FBBF24" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Context Awareness" />
+                                <TextBlock Text="Premium+ Exclusive" FontSize="9" Foreground="#A8A29E" Margin="8,2,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE946;" Foreground="#FBBF24" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Workflow Detection" />
+                                <TextBlock Text="Premium+ Exclusive" FontSize="9" Foreground="#A8A29E" Margin="8,2,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE946;" Foreground="#FBBF24" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Interactive Help &amp; AI Mentor" />
+                                <TextBlock Text="Coming Soon" FontSize="9" Foreground="#78716C" Margin="8,2,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource PlanFeatureRow}">
+                                <TextBlock Style="{StaticResource PlanFeatureIcon}" Text="&#xE946;" Foreground="#FBBF24" />
+                                <TextBlock Style="{StaticResource PlanFeatureText}" Text="Future Enterprise AI" />
+                            </StackPanel>
+                        </StackPanel>
+                        <Button x:Name="PremiumPlusUpgradeButton" Style="{StaticResource PlanUpgradeButton}" Background="#78350F" Content="Enter Code to Activate"
+                                PreviewMouseLeftButtonUp="OnPremiumPlusUpgradeClick">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="8" />
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <!-- Activation -->
+            <Border x:Name="ActivationPanel" Grid.Row="2" CornerRadius="16" Background="#0B1322" BorderBrush="#26354C" BorderThickness="1" Padding="28">
+                <StackPanel MaxWidth="640" HorizontalAlignment="Center">
+                    <TextBlock Text="Activate License" FontSize="18" FontWeight="SemiBold" Foreground="#E8EDF5" HorizontalAlignment="Center" Margin="0,0,0,6" />
+                    <TextBlock Text="Enter your activation code to unlock Premium features on this device."
+                               FontSize="11" Foreground="#64748B" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,0,0,20" />
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="ActivationCodeBox" Style="{StaticResource SearchBox}" Height="44" FontSize="13"
+                                 Padding="14,0" VerticalContentAlignment="Center"
+                                 Tag="Enter Activation Code" Foreground="#64748B" />
+                        <Button Grid.Column="1" Style="{StaticResource PrimaryButton}" Content="Activate" Padding="28,0" MinHeight="44" Margin="12,0,0,0" Click="OnActivateClick" />
+                    </Grid>
+                    <TextBlock Text="Your activation code unlocks Premium features on this device. No payment · No credit card · No subscription."
+                               FontSize="10" Foreground="#475569" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Margin="0,14,0,0" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Grid.Row="3" Text="Premium and Premium+ each require a valid activation code. Enter your code above or in Settings → License."
+                       FontSize="10" Foreground="#334155" HorizontalAlignment="Center" Margin="0,16,0,0" FontStyle="Italic" />
+        </Grid>
+        </ScrollViewer>
+    </Grid>
+</Window>

@@ -1,0 +1,55 @@
+<Window x:Class="Netvium.Views.Dashboard.WidgetSettingsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Widget Settings"
+        Width="420"
+        Height="520"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#0B1220">
+    <Border Margin="16" Background="#121A2B" BorderBrush="#1E2A3F" BorderThickness="1" CornerRadius="14" Padding="16">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Text="Widget Settings" Style="{StaticResource DashSectionTitle}" Margin="0,0,0,12" />
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <TextBlock Text="Title" Style="{StaticResource DashMetaLabel}" />
+                    <TextBox x:Name="TitleBox" Style="{StaticResource FormFieldTextBox}" Margin="0,4,0,10" />
+                    <TextBlock Text="Icon (Segoe MDL2)" Style="{StaticResource DashMetaLabel}" />
+                    <TextBox x:Name="IconBox" Style="{StaticResource FormFieldTextBox}" Margin="0,4,0,10" />
+                    <TextBlock Text="Accent Color" Style="{StaticResource DashMetaLabel}" />
+                    <TextBox x:Name="AccentBox" Style="{StaticResource FormFieldTextBox}" Margin="0,4,0,10" />
+                    <CheckBox x:Name="ShowHeaderCheck" Content="Show Header" Foreground="#CBD5E1" Margin="0,0,0,8" />
+                    <CheckBox x:Name="ShowBorderCheck" Content="Show Border" Foreground="#CBD5E1" Margin="0,0,0,8" />
+                    <CheckBox x:Name="CompactModeCheck" Content="Compact Mode" Foreground="#CBD5E1" Margin="0,0,0,8" />
+                    <CheckBox x:Name="AnimationCheck" Content="Animation" Foreground="#CBD5E1" Margin="0,0,0,8" />
+                    <TextBlock Text="Transparency" Style="{StaticResource DashMetaLabel}" />
+                    <Slider x:Name="TransparencySlider" Minimum="0.35" Maximum="1" Value="1" Margin="0,4,0,10" />
+                    <TextBlock Text="Refresh Interval (sec)" Style="{StaticResource DashMetaLabel}" />
+                    <TextBox x:Name="RefreshBox" Style="{StaticResource FormFieldTextBox}" Margin="0,4,0,10" />
+                    <TextBlock Text="Chart Type" Style="{StaticResource DashMetaLabel}" />
+                    <ComboBox x:Name="ChartTypeCombo" Style="{StaticResource TopBarComboBox}" Margin="0,4,0,10">
+                        <ComboBoxItem Content="line" />
+                        <ComboBoxItem Content="area" />
+                        <ComboBoxItem Content="bar" />
+                        <ComboBoxItem Content="gauge" />
+                    </ComboBox>
+                    <TextBlock Text="Decimal Precision" Style="{StaticResource DashMetaLabel}" />
+                    <TextBox x:Name="PrecisionBox" Style="{StaticResource FormFieldTextBox}" Margin="0,4,0,10" />
+                    <TextBlock Text="Warning Threshold" Style="{StaticResource DashMetaLabel}" />
+                    <TextBox x:Name="WarnBox" Style="{StaticResource FormFieldTextBox}" Margin="0,4,0,10" />
+                    <TextBlock Text="Critical Threshold" Style="{StaticResource DashMetaLabel}" />
+                    <TextBox x:Name="CritBox" Style="{StaticResource FormFieldTextBox}" Margin="0,4,0,10" />
+                </StackPanel>
+            </ScrollViewer>
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+                <Button Content="Cancel" Style="{StaticResource TopBarButton}" Width="90" Margin="0,0,8,0" IsCancel="True" />
+                <Button Content="Save" Style="{StaticResource PrimaryButton}" Width="90" IsDefault="True" Click="OnSaveClick" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

@@ -1,0 +1,114 @@
+<UserControl x:Class="Netvium.Views.RdpSessionTabView"
+
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+
+             MinWidth="640"
+
+             MinHeight="480"
+
+             Background="Black"
+
+             ClipToBounds="True"
+
+             HorizontalAlignment="Stretch"
+
+             VerticalAlignment="Stretch"
+
+             Loaded="OnSessionViewLoaded"
+
+             SizeChanged="OnSessionViewSizeChanged">
+
+    <Grid x:Name="RootGrid" Background="Black" ClipToBounds="True">
+
+        <Grid x:Name="RdpSurface"
+
+              HorizontalAlignment="Stretch"
+
+              VerticalAlignment="Stretch"
+
+              Background="Black"
+
+              ClipToBounds="True"
+
+              SizeChanged="OnRdpSurfaceSizeChanged" />
+
+
+
+        <Border x:Name="LoadingOverlay"
+
+                Background="#D9000000"
+
+                Visibility="Collapsed"
+
+                Panel.ZIndex="20"
+
+                HorizontalAlignment="Stretch"
+
+                VerticalAlignment="Stretch"
+
+                IsHitTestVisible="True">
+
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="560" Margin="24">
+
+                <ProgressBar IsIndeterminate="True" Width="200" Height="4" Background="#1E293B" Foreground="#3B82F6" BorderThickness="0" />
+
+                <TextBlock Text="Connecting..." Foreground="White" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,16,0,0" />
+
+                <TextBlock x:Name="LoadingStatusText" Text="Please wait" Foreground="#94A3B8" FontSize="12" HorizontalAlignment="Center" Margin="0,4,0,8" TextWrapping="Wrap" TextAlignment="Center" />
+
+                <Border Background="#111827" BorderBrush="#334155" BorderThickness="1" CornerRadius="4" Padding="10" MaxWidth="520">
+
+                    <TextBlock x:Name="LiveTimelineText" Foreground="#94A3B8" FontSize="10" FontFamily="Consolas" TextWrapping="Wrap" />
+
+                </Border>
+
+            </StackPanel>
+
+        </Border>
+
+
+
+        <Border x:Name="FailureOverlay"
+
+                Background="#E6000000"
+
+                Visibility="Collapsed"
+
+                Panel.ZIndex="30"
+
+                HorizontalAlignment="Stretch"
+
+                VerticalAlignment="Stretch"
+
+                IsHitTestVisible="True">
+
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" MaxWidth="520" Margin="24">
+
+                <TextBlock x:Name="FailureTitle" Text="Connection failed" Foreground="White" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,0,0,8" />
+
+                <TextBlock x:Name="FailureMessage" Text="Unable to connect." Foreground="#CBD5E1" FontSize="13" TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,16" />
+
+                <Border Background="#111827" BorderBrush="#334155" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,0,0,16">
+
+                    <TextBlock x:Name="DiagLayout" Text="—" Foreground="#94A3B8" FontSize="10" FontFamily="Consolas" TextWrapping="Wrap" MaxHeight="200" />
+
+                </Border>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                    <Button Content="Retry" Padding="18,8" Margin="0,0,8,0" Click="OnFailureRetryClick" />
+
+                    <Button Content="Copy diagnostics" Padding="18,8" Click="OnCopyDiagnosticsClick" />
+
+                </StackPanel>
+
+            </StackPanel>
+
+        </Border>
+
+    </Grid>
+
+</UserControl>
+

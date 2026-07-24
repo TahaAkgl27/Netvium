@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "domain": "windows-admin",
+  "entries": [
+    {
+      "id": "general-change-control",
+      "priority": 10,
+      "match": {
+        "intents": ["ServiceRestart", "ServiceManagement", "GroupPolicy"],
+        "workflows": ["generic"]
+      },
+      "expertTips": [
+        {
+          "tr": "Uretim ortaminda degisiklik oncesi geri alma plani ve etki alanini not et.",
+          "en": "In production, note rollback plan and blast radius before making changes."
+        }
+      ],
+      "whenToEscalate": [
+        {
+          "tr": "Domain controller, cluster veya kritik servislerde tek basina degisiklik yapma; degisiklik penceresi ve onay al.",
+          "en": "Do not change domain controllers, clusters, or critical services alone; use a change window and approval."
+        }
+      ]
+    }
+  ]
+}

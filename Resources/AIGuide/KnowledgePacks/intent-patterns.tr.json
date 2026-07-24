@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "rules": [
+    { "intent": "EventId1074Analysis", "priority": 10, "keywords": ["1074"], "visualContextField": "DetectedEventId", "visualContextValue": "1074" },
+    { "intent": "EventLogReview", "priority": 20, "keywords": ["6008"] },
+    { "intent": "EventLogReview", "priority": 21, "keywords": ["event 41", "event41", "unexpected shutdown"] },
+    { "intent": "EventLogReview", "priority": 22, "keywords": ["kerberos", "kerberos hatası", "kerberos hatasi"] },
+    { "intent": "EventLogReview", "priority": 23, "keywords": ["application error 1000", "application error", "error 1000"] },
+    { "intent": "EventLogReview", "priority": 24, "keywords": ["ntfs hata", "ntfs error", "ntfs event"] },
+    { "intent": "UserManagement", "priority": 30, "keywords": ["proxy address", "proxyaddress", "proxy adres", "mail adresi alias", "mail alias", "proxyaddress", "attribute editor"] },
+    { "intent": "UserManagement", "priority": 31, "keywords": ["upn suffix", "upn değiştir", "upn degistir", "upn suffix değiştir"] },
+    { "intent": "GroupMembership", "priority": 32, "keywords": ["gruptan çıkar", "gruptan cikar", "remove from group", "grup üyeliğini kaldır"] },
+    { "intent": "GroupMembership", "priority": 33, "keywords": ["gruba ekle", "group membership", "üye ekle", "uye ekle", "grup üyel", "member of", "group membership değiştir"] },
+    { "intent": "UserManagement", "priority": 34, "keywords": ["ou'ya taşı", "ou'ya tasi", "ou ya taşı", "move to ou", "ou'ya taşıyacağım"] },
+    { "intent": "UserManagement", "priority": 35, "keywords": ["disable et", "disable", "devre dışı", "devre disi", "pasife al", "pasif et", "kullanıcıyı disable", "kullaniciyi disable"] },
+    { "intent": "UserManagement", "priority": 36, "keywords": ["enable et", "enable", "aktif et", "kullanıcıyı enable", "kullaniciyi enable"] },
+    { "intent": "UserManagement", "priority": 37, "keywords": ["kullanıcı oluştur", "kullanici olustur", "create user", "yeni kullanıcı", "yeni kullanici", "delete user", "kullanıcı sil"] },
+    { "intent": "UserManagement", "priority": 38, "keywords": ["kullanıcıya izin", "kullaniciya izin"] },
+    { "intent": "UnlockUser", "priority": 40, "keywords": ["kilidi", "unlock", "kilitli", "locked out", "hesap kilit", "kilidini aç"] },
+    { "intent": "PasswordReset", "priority": 41, "keywords": ["şifre", "sifre", "password", "reset password", "parola", "şifresini", "sifresini", "şifre sıfırla", "sifre sifirla"] },
+    { "intent": "DhcpManagement", "priority": 50, "keywords": ["mac filter", "allow deny", "address pool", "lease süresi", "lease", "scope options", "scope option", "scope aç", "scope ac", "dhcp failover", "failover"] },
+    { "intent": "DhcpReservation", "priority": 51, "keywords": ["rezervasyon", "reservation", "mac adres", "sabit ip", "sabitlenecek ip"] },
+    { "intent": "IpConflictPrevention", "priority": 52, "keywords": ["ip çakış", "ip cakis", "conflict", "çakışma", "cakisma", "conflict detection"] },
+    { "intent": "DnsRecordCreation", "priority": 60, "keywords": ["a kaydı", "a record", "ptr kaydı", "ptr record", "mx record", "mx kaydı", "cname"] },
+    { "intent": "DnsManagement", "priority": 61, "keywords": ["forward lookup", "forward zone", "reverse lookup", "reverse zone", "conditional forwarder", "scavenging"] },
+    { "intent": "FolderPermission", "priority": 70, "keywords": ["iis klasör izni", "iis klasor izni", "iis folder permission"] },
+    { "intent": "IisBindingOrAppPool", "priority": 71, "keywords": ["yeni site", "new site", "create site", "virtual directory", "site durdu", "site stopped"] },
+    { "intent": "IisBindingOrAppPool", "priority": 72, "keywords": ["binding", "app pool", "application pool", "ssl sertifikası", "ssl certificate", "site restart", "app pool identity", "binding ayarla", "binding ekle"] },
+    { "intent": "ServiceRestart", "priority": 80, "keywords": ["servis yeniden", "restart service", "hizmet yeniden", "servisi başlat"] },
+    { "intent": "DnsManagement", "priority": 900, "anyOf": ["dns"] },
+    { "intent": "DhcpManagement", "priority": 901, "anyOf": ["dhcp", "scope"] },
+    { "intent": "EventLogReview", "priority": 902, "anyOf": ["event", "olay"] },
+    { "intent": "GroupPolicy", "priority": 903, "anyOf": ["group policy", "gpo", "grup ilkesi"] },
+    { "intent": "FolderPermission", "priority": 904, "anyOf": ["share izni", "paylaşım izni", "paylasim izni", "file and storage"] },
+    { "intent": "ServiceManagement", "priority": 905, "anyOf": ["service", "hizmet"] }
+  ],
+  "folderPermissionExtraction": {
+    "permissionKeywords": [
+      "izin ver", "izni ver", "izin verece", "görme izni", "goruntuleme izni", "gorme izni", "görüntüleme izni",
+      "görme izni ver", "gorme izni ver", "read izni", "write izni", "read permission", "write permission",
+      "erişim", "erisim", "permission", "paylaşım izni", "paylasim izni", "ntfs",
+      "read access", "write access", "yazma izni", "klasör izni", "klasor izni",
+      "dosya izni", "share permission", "güvenlik", "guvenlik", "security tab",
+      "tam denetim", "full control", "modify", "değiştir", "degistir",
+      " read ", " read,", " read.", " read'", " read access"
+    ],
+    "blockers": [
+      "proxyaddress", "proxy address", "mail address", "mail adresi", "mail alias",
+      "address pool", "addresspool", "ip address", "dns address", "binding address",
+      "upn", "upn suffix", "alias ekle", "proxy adres"
+    ],
+    "contextKeywords": [
+      "klasör", "klasor", "folder", "ntfs", "paylaşım", "paylasim", "permission", "security", "güvenlik", "guvenlik"
+    ],
+    "usernameExclusions": ["ntfs", "read", "write", "shared", "share"],
+    "permissionLevels": [
+      { "id": "fullControl", "keywords": ["tam denetim", "full control", "tam kontrol"], "label": { "en": "Full Control", "tr": "Tam Denetim / Full Control" } },
+      { "id": "modify", "keywords": ["yazma", "write", "modify", "değiştir", "degistir", "change"], "label": { "en": "Modify / Write", "tr": "Yazma / Modify" } },
+      { "id": "read", "keywords": ["görme", "gorme", "görüntüle", "goruntule", "read", "list", "okuma", "execute", "çalıştır", "calistir"], "label": { "en": "Read / List", "tr": "Görme / Read" } }
+    ]
+  }
+}

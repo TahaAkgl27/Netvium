@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "consumerApps": [
+    { "id": "Excel", "label": "Excel", "patterns": ["microsoft excel", "excel"] },
+    { "id": "Word", "label": "Word", "patterns": ["microsoft word", "winword"] },
+    { "id": "Outlook", "label": "Outlook", "patterns": ["microsoft outlook", "outlook"] },
+    { "id": "Chrome", "label": "Google Chrome", "patterns": ["google chrome", "chrome"] },
+    { "id": "Edge", "label": "Microsoft Edge", "patterns": ["microsoft edge", "edge"] },
+    { "id": "Photos", "label": "Google Photos", "patterns": ["google photos", "photos"] },
+    { "id": "Paint", "label": "Paint", "patterns": ["paint", "mspaint"] },
+    { "id": "Notepad", "label": "Notepad", "patterns": ["notepad"] },
+    { "id": "PowerPoint", "label": "PowerPoint", "patterns": ["powerpoint", "microsoft powerpoint"] },
+    { "id": "TeamViewer", "label": "TeamViewer", "patterns": ["teamviewer"] },
+    { "id": "AnyDesk", "label": "AnyDesk", "patterns": ["anydesk"] }
+  ],
+  "intentScreens": [
+    { "intent": "FolderPermission", "allowedScreens": ["FileExplorer", "ServerManager", "ComputerManagement"], "allowedScreenLabels": ["File Explorer", "Server Manager", "Computer Management"] },
+    { "intent": "PasswordReset", "allowedScreens": ["ActiveDirectoryUsersAndComputers"], "allowedScreenLabels": ["Active Directory Users and Computers"] },
+    { "intent": "UnlockUser", "allowedScreens": ["ActiveDirectoryUsersAndComputers"], "allowedScreenLabels": ["Active Directory Users and Computers"] },
+    { "intent": "UserManagement", "allowedScreens": ["ActiveDirectoryUsersAndComputers"], "allowedScreenLabels": ["Active Directory Users and Computers"] },
+    { "intent": "GroupMembership", "allowedScreens": ["ActiveDirectoryUsersAndComputers"], "allowedScreenLabels": ["Active Directory Users and Computers"] },
+    { "intent": "DhcpReservation", "allowedScreens": ["Dhcp"], "allowedScreenLabels": ["DHCP"] },
+    { "intent": "IpConflictPrevention", "allowedScreens": ["Dhcp"], "allowedScreenLabels": ["DHCP"] },
+    { "intent": "DhcpManagement", "allowedScreens": ["Dhcp"], "allowedScreenLabels": ["DHCP"] },
+    { "intent": "DnsRecordCreation", "allowedScreens": ["DnsManager"], "allowedScreenLabels": ["DNS Manager"] },
+    { "intent": "DnsManagement", "allowedScreens": ["DnsManager"], "allowedScreenLabels": ["DNS Manager"] },
+    { "intent": "IisBindingOrAppPool", "allowedScreens": ["IisManager"], "allowedScreenLabels": ["IIS Manager"] },
+    { "intent": "EventLogReview", "allowedScreens": ["EventViewer"], "allowedScreenLabels": ["Event Viewer"] },
+    { "intent": "EventId1074Analysis", "allowedScreens": ["EventViewer"], "allowedScreenLabels": ["Event Viewer"] },
+    { "intent": "ServiceRestart", "allowedScreens": ["Services", "ComputerManagement"], "allowedScreenLabels": ["Services", "Computer Management"] },
+    { "intent": "ServiceManagement", "allowedScreens": ["Services", "ComputerManagement"], "allowedScreenLabels": ["Services", "Computer Management"] }
+  ],
+  "wrongScreen": {
+    "observations": {
+      "consumerApp": {
+        "en": "{{screenLabel}} cannot set NTFS or share permissions.",
+        "tr": "{{screenLabel}} üzerinden NTFS veya paylaşım izni verilemez."
+      },
+      "iisFolderPermission": {
+        "en": "On IIS you can manage sites or bindings, but for NTFS folder permissions use File Explorer or the folder Security tab.",
+        "tr": "IIS ekranında site veya binding yönetebilirsin, ama NTFS klasör izni vermek için File Explorer veya klasör Security sekmesine gitmelisin."
+      },
+      "generic": {
+        "en": "This screen is not suitable for this task.",
+        "tr": "Bu ekran bu işlem için uygun değil."
+      }
+    },
+    "redirectSteps": {
+      "FolderPermission": [
+        { "en": "Open File Explorer.", "tr": "File Explorer aç." },
+        { "en": "Type {{path}} in the address bar.", "tr": "Adres çubuğuna {{path}} yaz.", "requiresToken": "path" },
+        { "en": "Navigate to the target folder path.", "tr": "Hedef klasör yoluna git.", "fallbackWhenNoPath": true },
+        { "en": "After reaching the folder, continue with permission steps.", "tr": "Klasöre ulaştıktan sonra izin adımlarına devam et." }
+      ],
+      "PasswordReset": [
+        { "en": "Open Active Directory Users and Computers.", "tr": "Active Directory Users and Computers aç." },
+        { "en": "Find the target user.", "tr": "Hedef kullanıcıyı bul." },
+        { "en": "Apply the requested action.", "tr": "İstenen işlemi uygula." }
+      ],
+      "UnlockUser": [
+        { "en": "Open Active Directory Users and Computers.", "tr": "Active Directory Users and Computers aç." },
+        { "en": "Find the target user.", "tr": "Hedef kullanıcıyı bul." },
+        { "en": "Apply the requested action.", "tr": "İstenen işlemi uygula." }
+      ],
+      "DhcpReservation": [
+        { "en": "Open DHCP Manager.", "tr": "DHCP Manager aç." },
+        { "en": "Go to IPv4 > relevant scope.", "tr": "IPv4 > ilgili scope'a git." },
+        { "en": "Apply the operation.", "tr": "İşlemi uygula." }
+      ],
+      "DhcpManagement": [
+        { "en": "Open DHCP Manager.", "tr": "DHCP Manager aç." },
+        { "en": "Go to IPv4 > relevant scope.", "tr": "IPv4 > ilgili scope'a git." },
+        { "en": "Apply the operation.", "tr": "İşlemi uygula." }
+      ],
+      "DnsRecordCreation": [
+        { "en": "Open DNS Manager.", "tr": "DNS Manager aç." },
+        { "en": "Select the relevant zone.", "tr": "İlgili zone'u seç." },
+        { "en": "Apply the record operation.", "tr": "Kayıt işlemini uygula." }
+      ],
+      "DnsManagement": [
+        { "en": "Open DNS Manager.", "tr": "DNS Manager aç." },
+        { "en": "Select the relevant zone.", "tr": "İlgili zone'u seç." },
+        { "en": "Apply the record operation.", "tr": "Kayıt işlemini uygula." }
+      ],
+      "IisBindingOrAppPool": [
+        { "en": "Open IIS Manager.", "tr": "IIS Manager aç." },
+        { "en": "Select site or Application Pool.", "tr": "Site veya Application Pool seç." },
+        { "en": "Apply the operation.", "tr": "İşlemi uygula." }
+      ],
+      "EventLogReview": [
+        { "en": "Open Event Viewer.", "tr": "Event Viewer aç." },
+        { "en": "Select Windows Logs > System/Application.", "tr": "Windows Logs > System/Application seç." },
+        { "en": "Review the entry.", "tr": "Kaydı incele." }
+      ],
+      "EventId1074Analysis": [
+        { "en": "Open Event Viewer.", "tr": "Event Viewer aç." },
+        { "en": "Select Windows Logs > System/Application.", "tr": "Windows Logs > System/Application seç." },
+        { "en": "Review the entry.", "tr": "Kaydı incele." }
+      ],
+      "default": [
+        { "en": "You are not on the correct screen ({{screenLabel}}).", "tr": "Şu an doğru ekranda değilsiniz ({{screenLabel}})." },
+        { "en": "Open the correct management tool.", "tr": "Doğru yönetim aracını açın." },
+        { "en": "Then retry the operation.", "tr": "Sonra işlemi tekrar deneyin." }
+      ]
+    }
+  }
+}

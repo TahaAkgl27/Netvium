@@ -1,0 +1,42 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="Netvium" Manufacturer="Netvium" Version="$(var.ProductVersion)" UpgradeCode="6D7C8B65-5B5A-4C2D-9A1C-2A6C0F0E6F6E" Scope="perMachine">
+    <SummaryInformation Description="Netvium controlled pilot desktop application" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of Netvium is already installed." AllowSameVersionUpgrades="yes" />
+    <MediaTemplate EmbedCab="yes" />
+    <Property Id="NETVIUM_DESKTOP_RUNTIME_8_X64">
+      <RegistrySearch Id="NetviumDesktopRuntime8X64" Root="HKLM" Key="SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedfx\Microsoft.WindowsDesktop.App" Name="Version" Type="raw" Bitness="always64" />
+    </Property>
+    <Launch Condition="NETVIUM_DESKTOP_RUNTIME_8_X64 AND NETVIUM_DESKTOP_RUNTIME_8_X64 &gt;= &quot;8.0&quot;" Message="Netvium için .NET 8 Windows Desktop Runtime (x64) kurulmalıdır. Kurulumu başlatmadan önce Microsoft .NET 8 Desktop Runtime x64 yükleyin." />
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="Netvium" />
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="Netvium" />
+    </StandardDirectory>
+    <StandardDirectory Id="DesktopFolder" />
+    <Feature Id="MainFeature" Title="Netvium" Level="1">
+      <ComponentGroupRef Id="ApplicationFiles" />
+      <ComponentRef Id="StartMenuShortcut" />
+    </Feature>
+    <Feature Id="DesktopShortcutFeature" Title="Desktop shortcut" Level="100">
+      <ComponentRef Id="DesktopShortcut" />
+    </Feature>
+    <Feature Id="AgentFeature" Title="Optional Netvium Agent" Level="100">
+      <ComponentGroupRef Id="AgentFiles" />
+    </Feature>
+  </Package>
+  <Fragment>
+    <Component Id="StartMenuShortcut" Directory="ApplicationProgramsFolder" Guid="*">
+      <Shortcut Id="StartMenuShortcut" Name="Netvium" Target="[INSTALLFOLDER]Netvium.exe" WorkingDirectory="INSTALLFOLDER" />
+      <RemoveFolder Id="RemoveApplicationProgramsFolder" On="uninstall" />
+      <RegistryValue Root="HKLM" Key="Software\Netvium" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+    </Component>
+    <Component Id="DesktopShortcut" Directory="DesktopFolder" Guid="*">
+      <Shortcut Id="DesktopShortcut" Name="Netvium" Target="[INSTALLFOLDER]Netvium.exe" WorkingDirectory="INSTALLFOLDER" />
+      <RegistryValue Root="HKLM" Key="Software\Netvium" Name="desktopShortcut" Type="integer" Value="1" KeyPath="yes" />
+    </Component>
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Directory Id="AGENTFOLDER" Name="Agent" />
+    </DirectoryRef>
+  </Fragment>
+</Wix>

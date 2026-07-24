@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "scoring": {
+    "screenCorrect": 30,
+    "intentDetected": 20,
+    "workflowMatched": 20,
+    "targetVisible": 20,
+    "targetVerified": 10
+  },
+  "thresholds": {
+    "high": 90,
+    "medium": 70
+  },
+  "overrides": {
+    "wrongScreen": "Low",
+    "unknownScreenMax": "Medium",
+    "targetNotVisibleMax": "Medium",
+    "missingRequiredTargetMax": "Medium",
+    "genericWorkflowMax": "Medium",
+    "serverManagerFolderPermissionMax": "Medium",
+    "targetSelectedButNotVerifiedMax": "Medium",
+    "hallucinationTriggered": "Low",
+    "wrongObjectDetected": "Low",
+    "clarificationRequiredLow": "Low",
+    "clarificationRequiredMedium": "Medium",
+    "intentUnknown": "Low",
+    "exploratoryQuestionFloor": "Medium",
+    "targetVisibleAndSelectedAndIntentClearBoost": "High",
+    "nonFolderIntentOnCorrectScreenBoost": "High"
+  }
+}

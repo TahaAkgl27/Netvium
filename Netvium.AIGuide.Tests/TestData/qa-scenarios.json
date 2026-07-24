@@ -1,0 +1,52 @@
+{
+  "workflowRegistry": {
+    "expectMinGuides": 7,
+    "expectWorkflowIds": [
+      "folder-permission",
+      "active-directory",
+      "dhcp",
+      "dns",
+      "iis",
+      "event-viewer",
+      "generic"
+    ]
+  },
+  "decide": [
+    {
+      "name": "FolderPermission_SelectsFolderPermissionWorkflow",
+      "userQuestion": "D:\\Shared\\IT klasörüne Taha'ya Read izni vereceğim.",
+      "activeWindowTitle": "File Explorer D:\\Shared\\IT",
+      "screenKind": "FileExplorer",
+      "ocrStatusBar": "D:\\Shared\\IT",
+      "statusBarText": "D:\\Shared\\IT",
+      "selectedListItem": "IT",
+      "expectWorkflowName": "folder-permission",
+      "expectIntent": "FolderPermission",
+      "expectConfidence": "High"
+    },
+    {
+      "name": "ReturnsOnlyOneNextStep_NotFullWorkflow",
+      "userQuestion": "Kullanıcı şifresini sıfırlayacağım",
+      "activeWindowTitle": "Active Directory Users and Computers",
+      "screenKind": "ActiveDirectoryUsersAndComputers",
+      "expectWorkflowName": "active-directory"
+    },
+    {
+      "name": "DhcpReservation_SelectsDhcpWorkflow",
+      "userQuestion": "MAC AA-BB-CC-DD-EE-FF için rezervasyon oluşturacağım 192.168.1.50",
+      "activeWindowTitle": "DHCP",
+      "screenKind": "Dhcp",
+      "expectWorkflowName": "dhcp",
+      "expectIntent": "DhcpReservation"
+    }
+  ],
+  "responseGenerator": [
+    {
+      "name": "ProducesStructuredAnswerWithSingleStep",
+      "userQuestion": "D:\\Shared\\IT Taha read izni",
+      "activeWindowTitle": "File Explorer D:\\Shared\\IT",
+      "screenKind": "FileExplorer",
+      "expectSingleManualStep": true
+    }
+  ]
+}

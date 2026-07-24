@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "domain": "file-permission",
+  "entries": [
+    {
+      "id": "ntfs-share-distinction",
+      "priority": 100,
+      "match": {
+        "intents": ["FolderPermission"],
+        "goals": ["GrantPermission", "TroubleshootPermission", "AuditPermission"],
+        "workflows": ["folder-permission"],
+        "screens": ["FileExplorer", "ServerManager"]
+      },
+      "commonMistakes": [
+        {
+          "tr": "Bu islemde en sik hata yanlis klasore NTFS izni vermek yerine sadece paylasim izni vermektir. Gerekirse Security sekmesini de kontrol et.",
+          "en": "The most common mistake is granting only share permission instead of NTFS on the correct folder. Check the Security tab when needed."
+        }
+      ],
+      "verificationChecks": [
+        {
+          "tr": "Security sekmesi, Effective Access, Share Permissions, grup uyeligi, inheritance ve Deny kayitlarini kontrol et.",
+          "en": "Check Security tab, Effective Access, Share Permissions, group membership, inheritance, and Deny entries."
+        }
+      ],
+      "expertTips": [
+        {
+          "tr": "NTFS ve paylasim izni birlikte calisir; kullanici her iki katmanda da yetkili olmalidir.",
+          "en": "NTFS and share permissions work together; the user must be authorized at both layers."
+        }
+      ],
+      "riskWarnings": [
+        {
+          "tr": "Deny izni Allow'dan daha gucludur; Effective Access ile dogrula.",
+          "en": "Deny overrides Allow; verify with Effective Access."
+        }
+      ]
+    },
+    {
+      "id": "wrong-folder-selection",
+      "priority": 90,
+      "match": {
+        "intents": ["FolderPermission"],
+        "goals": ["GrantPermission"],
+        "workflows": ["folder-permission"],
+        "screens": ["FileExplorer"],
+        "states": ["TargetNotVisible", "WaitingForFolder"]
+      },
+      "commonMistakes": [
+        {
+          "tr": "Secili dosya veya yanlis klasore izin vermek cok yaygindir. Hedef klasore gitmeden Properties acma.",
+          "en": "Granting permission on the selected file or wrong folder is common. Navigate to the target folder before opening Properties."
+        }
+      ],
+      "verificationChecks": [
+        {
+          "tr": "Address bar, secili oge ve hedef path ayni klasoru gosteriyor mu kontrol et.",
+          "en": "Verify address bar, selected item, and target path all refer to the same folder."
+        }
+      ]
+    }
+  ]
+}

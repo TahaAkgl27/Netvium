@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TestData\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Netvium.csproj">
+      <Properties>OutputPath=$(MSBuildThisFileDirectory)..\bin\qa-staging\;UseAppHost=false</Properties>
+    </ProjectReference>
+  </ItemGroup>
+  <!-- FAZ 6E: legacy-only tests are retained but excluded from the active test assembly. -->
+  <ItemGroup>
+    <Compile Remove="LicenseActivationTests.cs" />
+    <Compile Remove="LicenseActivationTestStorage.cs" />
+    <Compile Remove="LicenseStorageIsolationTests.cs" />
+    <Compile Remove="RdpConnectDeadlineTests.cs" />
+  </ItemGroup></Project>
