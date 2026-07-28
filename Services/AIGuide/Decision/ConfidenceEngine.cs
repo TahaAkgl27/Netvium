@@ -161,7 +161,7 @@ namespace Netvium.Services.AIGuide.Decision
 
 
 
-            if (!input.IntentDetected && input.ScreenCorrect && label == "Low" && !input.ClarificationRequired)
+            if (!input.IntentDetected && input.ScreenCorrect && input.IsExploratoryQuestion && label == "Low" && !input.ClarificationRequired)
 
             {
 
@@ -177,9 +177,25 @@ namespace Netvium.Services.AIGuide.Decision
 
             {
 
-                label = overrides.GetValueOrDefault("intentUnknown", "Low");
+                if (input.ScreenCorrect && !input.IsUnknownScreen && input.IsExploratoryQuestion)
 
-                factors.Add("IntentUnknown override");
+                {
+
+                    label = overrides.GetValueOrDefault("exploratoryQuestionFloor", "Medium");
+
+                    factors.Add("RecognizedScreenExploration floor");
+
+                }
+
+                else
+
+                {
+
+                    label = overrides.GetValueOrDefault("intentUnknown", "Low");
+
+                    factors.Add("IntentUnknown override");
+
+                }
 
             }
 

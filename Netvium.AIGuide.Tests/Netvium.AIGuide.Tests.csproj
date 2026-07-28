@@ -11,14 +11,15 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="TestData\**\*.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="TestData\**\*.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Netvium.csproj">
-      <Properties>OutputPath=$(MSBuildThisFileDirectory)..\bin\qa-staging\;UseAppHost=false</Properties>
-    </ProjectReference>
+    <ProjectReference Include="..\Netvium.csproj" />
   </ItemGroup>
   <!-- FAZ 6E: legacy-only tests are retained but excluded from the active test assembly. -->
   <ItemGroup>

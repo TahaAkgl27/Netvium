@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rc2Smoke", "tools\Rc2Smoke\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Netvium.Agent.Tests", "Netvium.Agent.Tests\Netvium.Agent.Tests.csproj", "{17C5CC62-265F-411D-AD80-03F5C4411391}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetviumLocalDataValidator", "tools\NetviumLocalDataValidator\NetviumLocalDataValidator.csproj", "{5BB5116B-D893-4071-80A4-CBDAB909C94B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -155,6 +157,18 @@ Global
 		{17C5CC62-265F-411D-AD80-03F5C4411391}.Release|x64.Build.0 = Release|Any CPU
 		{17C5CC62-265F-411D-AD80-03F5C4411391}.Release|x86.ActiveCfg = Release|Any CPU
 		{17C5CC62-265F-411D-AD80-03F5C4411391}.Release|x86.Build.0 = Release|Any CPU
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B}.Debug|x64.Build.0 = Debug|Any CPU
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B}.Debug|x86.Build.0 = Debug|Any CPU
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B}.Release|x64.ActiveCfg = Release|Any CPU
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B}.Release|x64.Build.0 = Release|Any CPU
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B}.Release|x86.ActiveCfg = Release|Any CPU
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -164,6 +178,7 @@ Global
 		{6E417147-594A-4627-AB71-175D5E43CBF2} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{E3D5596F-3BEF-4846-BEE3-BEBB9EF68C05} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{22CC7BB4-3F69-4C56-BB02-9ABAC2EFE59E} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{5BB5116B-D893-4071-80A4-CBDAB909C94B} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37F48A78-56AD-4186-ADC8-0D92047656CB}

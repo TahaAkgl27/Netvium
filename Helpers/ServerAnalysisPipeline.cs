@@ -17,7 +17,8 @@ namespace Netvium.Helpers
             bool rdpOpen,
             List<WmiSnapshot>? history,
             int healthScore,
-            SnapshotTrendData? trends = null)
+            SnapshotTrendData? trends = null,
+            WmiSnapshot? comparisonSnapshot = null)
         {
             var intel = IntelligenceEngine.GenerateIntelligence(snap, server.Name ?? "SUNUCU", history);
             var services = snap.Services ?? new List<ServiceRow>();
@@ -38,6 +39,12 @@ namespace Netvium.Helpers
                 .Where(s => s.IsCritical && !s.State.Equals("Running", StringComparison.OrdinalIgnoreCase))
                 .Select(s => s.Display)
                 .ToList();
+            var systemHealth = BuildSystemHealth(snap, services);
+            var eventSummary = BuildEventSummary(snap.Timeline);
+            var dataQuality = BuildDataQuality(snap, systemHealth, comparisonSnapshot, DateTime.UtcNow);
+            var cpuTrend = SmartAnalysisPolicy.EvaluateCpu(history, snap);
+            var ramTrend = SmartAnalysisPolicy.EvaluateRam(history, snap);
+            var diskTrend = SmartAnalysisPolicy.EvaluateDisk(history, snap);
 
             var ctx = new ServerAnalysisContext
             {
@@ -68,6 +75,12 @@ namespace Netvium.Helpers
                 StoppedCriticalServices = stoppedCritical,
                 OpenPorts = snap.ListenPorts?.Take(20).Select(p => p.ToString()).ToList() ?? new List<string>(),
                 RecentEventLogs = snap.Timeline?.Take(6).Select(t => $"[{t.Level}] {t.Type} {t.Message}").ToList() ?? new List<string>(),
+                EventSummary = eventSummary,
+                SystemHealth = systemHealth,
+                DataQuality = dataQuality,
+                CpuTrendAssessment = cpuTrend,
+                RamTrendAssessment = ramTrend,
+                DiskTrendAssessment = diskTrend,
                 HasWmiData = snap.Connected
             };
 
@@ -172,6 +185,143 @@ namespace Netvium.Helpers
             return null;
         }
 
+        private static SystemHealthAnalysisData BuildSystemHealth(WmiSnapshot snap, List<ServiceRow> services)
+        {
+            var components = snap.SystemStatusComponents ?? new List<DetectedComponent>();
+            var defenderComponent = components.FirstOrDefault(c =>
+                c.Name.Equals("Windows Defender", StringComparison.OrdinalIgnoreCase));
+            var defender = snap.DefenderRealTimeProtectionEnabled
+                ?? StatusToBool(defenderComponent?.Status);
+            if (!defender.HasValue && services.Any(s =>
+                    s.Name.Equals("WinDefend", StringComparison.OrdinalIgnoreCase)
+                    || s.Name.Equals("MsMpSvc", StringComparison.OrdinalIgnoreCase)))
+            {
+                defender = IsServiceRunning(services, "WinDefend") || IsServiceRunning(services, "MsMpSvc");
+            }
+
+            var pendingRestartComponent = components.FirstOrDefault(c =>
+                c.Name.Equals("Pending Restart", StringComparison.OrdinalIgnoreCase));
+            var pendingRestart = snap.WindowsUpdateRebootRequired
+                ?? PendingRestartStatusToBool(pendingRestartComponent?.Status);
+            var pendingRestartSignal = snap.WindowsUpdateRebootRequired.HasValue
+                ? "WindowsUpdateRebootRequired"
+                : pendingRestartComponent == null ? null : "SystemStatusProbe: Pending Restart";
+
+            var thirdParty = components.FirstOrDefault(c =>
+                c.Type.Equals("Security", StringComparison.OrdinalIgnoreCase)
+                && !c.Name.Contains("Defender", StringComparison.OrdinalIgnoreCase)
+                && !c.Name.Contains("Firewall", StringComparison.OrdinalIgnoreCase)
+                && !c.Name.Contains("BitLocker", StringComparison.OrdinalIgnoreCase)
+                && (c.Name.Contains("Antivirus", StringComparison.OrdinalIgnoreCase)
+                    || c.Name.Contains("Endpoint", StringComparison.OrdinalIgnoreCase)
+                    || c.Name.Contains("Security", StringComparison.OrdinalIgnoreCase)));
+
+            return new SystemHealthAnalysisData
+            {
+                DefenderEnabled = defender,
+                ThirdPartyAntivirusHealthy = thirdParty == null ? null : StatusToBool(thirdParty.Status),
+                ThirdPartyAntivirusName = thirdParty?.Name,
+                FirewallDomainEnabled = snap.FirewallDomainEnabled,
+                FirewallPrivateEnabled = snap.FirewallPrivateEnabled,
+                FirewallPublicEnabled = snap.FirewallPublicEnabled,
+                PendingRestart = pendingRestart,
+                PendingRestartSignal = pendingRestartSignal,
+                DnsStatus = components.FirstOrDefault(c => c.Name.Equals("DNS", StringComparison.OrdinalIgnoreCase))?.Status,
+                TimeSyncStatus = components.FirstOrDefault(c => c.Name.Equals("Time Sync", StringComparison.OrdinalIgnoreCase))?.Status
+            };
+        }
+
+        private static bool? PendingRestartStatusToBool(string? status)
+        {
+            if (string.IsNullOrWhiteSpace(status)
+                || status.Contains("bilin", StringComparison.OrdinalIgnoreCase)
+                || status.Contains("unknown", StringComparison.OrdinalIgnoreCase)) return null;
+            if (status.Contains("gerekli de\u011Fil", StringComparison.OrdinalIgnoreCase)
+                || status.Contains("not required", StringComparison.OrdinalIgnoreCase)) return false;
+            if (status.Contains("gerekli", StringComparison.OrdinalIgnoreCase)
+                || status.Contains("required", StringComparison.OrdinalIgnoreCase)) return true;
+            return null;
+        }
+
+        private static bool? StatusToBool(string? status)
+        {
+            if (string.IsNullOrWhiteSpace(status) || status.Contains("bilin", StringComparison.OrdinalIgnoreCase)
+                || status.Contains("unknown", StringComparison.OrdinalIgnoreCase)) return null;
+            if (status.Contains("aktif", StringComparison.OrdinalIgnoreCase)
+                || status.Contains("running", StringComparison.OrdinalIgnoreCase)
+                || status.Contains("sağlıklı", StringComparison.OrdinalIgnoreCase)
+                || status.Contains("healthy", StringComparison.OrdinalIgnoreCase)
+                || status.Contains("senkron", StringComparison.OrdinalIgnoreCase)) return true;
+            if (status.Contains("kapalı", StringComparison.OrdinalIgnoreCase)
+                || status.Contains("pasif", StringComparison.OrdinalIgnoreCase)
+                || status.Contains("stopped", StringComparison.OrdinalIgnoreCase)
+                || status.Contains("uyarı", StringComparison.OrdinalIgnoreCase)
+                || status.Contains("hata", StringComparison.OrdinalIgnoreCase)) return false;
+            return null;
+        }
+
+        private static EventSeveritySummary BuildEventSummary(List<TimelineEvent>? events) => new()
+        {
+            CriticalCount = events?.Count(e => e.Level.Equals("Critical", StringComparison.OrdinalIgnoreCase)) ?? 0,
+            ErrorCount = events?.Count(e => e.Level.Equals("Error", StringComparison.OrdinalIgnoreCase)) ?? 0,
+            WarningCount = events?.Count(e => e.Level.Equals("Warning", StringComparison.OrdinalIgnoreCase)) ?? 0,
+            InfoCount = events?.Count(e => e.Level.Equals("Info", StringComparison.OrdinalIgnoreCase)
+                || e.Level.Equals("Success", StringComparison.OrdinalIgnoreCase)) ?? 0
+        };
+
+        private static AnalysisDataQuality BuildDataQuality(WmiSnapshot snap, SystemHealthAnalysisData health, WmiSnapshot? comparison, DateTime nowUtc)
+        {
+            var collectedUtc = snap.CollectedAt == default ? (DateTime?)null : snap.CollectedAt.ToUniversalTime();
+            var age = collectedUtc.HasValue ? nowUtc - collectedUtc.Value : (TimeSpan?)null;
+            if (age < TimeSpan.Zero) age = TimeSpan.Zero;
+            var unavailable = new List<string>();
+            if (!snap.CpuPct.HasValue) unavailable.Add("CPU");
+            if (!snap.RamUsedPct.HasValue) unavailable.Add("RAM");
+            if (!snap.DiskUsedPct.HasValue) unavailable.Add("Disk");
+            if (!health.DefenderEnabled.HasValue && !health.ThirdPartyAntivirusHealthy.HasValue) unavailable.Add("Antivirus");
+            if (!health.FirewallDomainEnabled.HasValue || !health.FirewallPrivateEnabled.HasValue || !health.FirewallPublicEnabled.HasValue)
+                unavailable.Add("Firewall profiles");
+            if (!health.PendingRestart.HasValue) unavailable.Add("Pending restart");
+            if (string.IsNullOrWhiteSpace(health.DnsStatus))
+                unavailable.Add("DNS health");
+            if (string.IsNullOrWhiteSpace(health.TimeSyncStatus))
+                unavailable.Add("Time synchronization");
+
+            var conflicts = CompareSources(snap, comparison);
+            var cache = snap.DataSource is SnapshotDataSources.Cache or SnapshotDataSources.Persistent;
+            var stale = !age.HasValue || age.Value > SmartAnalysisPolicy.StaleAfter;
+            var confidence = 100 - (cache ? 20 : 0) - (stale ? 20 : 0)
+                - Math.Min(35, unavailable.Count * 5) - (conflicts.Count > 0 ? 25 : 0);
+            return new AnalysisDataQuality
+            {
+                Source = string.IsNullOrWhiteSpace(snap.DataSource) ? "Unknown" : snap.DataSource,
+                CollectedAtUtc = collectedUtc,
+                Age = age,
+                IsCache = cache,
+                IsStale = stale,
+                ConfidencePercent = Math.Clamp(confidence, 0, 100),
+                SourcesCompared = comparison != null,
+                HasSourceConflict = conflicts.Count > 0,
+                UnavailableComponents = unavailable,
+                Conflicts = conflicts
+            };
+        }
+
+        private static List<string> CompareSources(WmiSnapshot primary, WmiSnapshot? other)
+        {
+            var conflicts = new List<string>();
+            if (other == null) return conflicts;
+            if (primary.Connected != other.Connected) conflicts.Add("Connected/status");
+            if (Difference(primary.CpuPct, other.CpuPct) > 15) conflicts.Add("CPU");
+            if (Difference(primary.RamUsedPct, other.RamUsedPct) > 10) conflicts.Add("RAM");
+            if (Difference(primary.DiskUsedPct, other.DiskUsedPct) > 5) conflicts.Add("Disk");
+            if (primary.CollectedAt != default && other.CollectedAt != default
+                && (primary.CollectedAt - other.CollectedAt).Duration() > TimeSpan.FromMinutes(2)) conflicts.Add("Timestamp");
+            return conflicts;
+        }
+
+        private static double Difference(double? left, double? right) =>
+            left.HasValue && right.HasValue ? Math.Abs(left.Value - right.Value) : 0;
         private static bool IsServiceRunning(List<ServiceRow> services, string name) =>
             services.Any(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
                 && s.State.Equals("Running", StringComparison.OrdinalIgnoreCase));

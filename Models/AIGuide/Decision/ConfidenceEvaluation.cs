@@ -25,6 +25,7 @@ namespace Netvium.Models.AIGuide.Decision
         public bool WrongObjectDetected { get; init; }
         public bool ClarificationRequired { get; init; }
         public bool IntentUnknown { get; init; }
+        public bool IsExploratoryQuestion { get; init; }
         public bool TargetSelectedButNotVerified { get; init; }
         public bool TargetVisibleAndSelectedAndIntentClear { get; init; }
         public bool IsFolderPermissionIntent { get; init; }

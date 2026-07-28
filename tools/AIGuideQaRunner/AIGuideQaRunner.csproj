@@ -8,9 +8,7 @@
     <RootNamespace>AIGuideQaRunner</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Netvium.csproj">
-      <Properties>OutputPath=$(MSBuildThisFileDirectory)..\..\bin\qa-staging\;UseAppHost=false</Properties>
-    </ProjectReference>
+    <ProjectReference Include="..\..\Netvium.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TestData\*.json" CopyToOutputDirectory="PreserveNewest" />

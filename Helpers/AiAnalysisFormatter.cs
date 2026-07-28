@@ -39,7 +39,7 @@ namespace Netvium.Helpers
 
             report.CriticalFindings = ctx.TopFindings
                 .Take(5)
-                .Select(f => new AiFindingItem { Text = f.Title, Evidence = f.Evidence })
+                .Select(f => new AiFindingItem { Text = f.Title, Evidence = f.Evidence, RiskLevel = f.Severity.ToString() })
                 .ToList();
 
             report.Performance = BuildPerformance(ctx);
@@ -81,8 +81,10 @@ namespace Netvium.Helpers
             {
                 AddSectionHeader(list, ref sort, SectionTopRisks);
                 foreach (var item in report.CriticalFindings.Take(5))
-                    AddItem(list, ref sort, SectionTopRisks, $"• {item.Text}", report.FromAi, item.Evidence, null,
-                        InsightSeverity.Critical);
+                {
+                    var severity = ParseSeverity(item.RiskLevel, InsightSeverity.Warning);
+                    AddItem(list, ref sort, SectionTopRisks, $"• {item.Text}", report.FromAi, item.Evidence, null, severity);
+                }
             }
 
             if (report.Performance.Count > 0)
@@ -110,7 +112,8 @@ namespace Netvium.Helpers
             {
                 AddSectionHeader(list, ref sort, SectionEventAnalysis);
                 foreach (var item in report.EventAnalysis.Take(4))
-                    AddItem(list, ref sort, SectionEventAnalysis, item.Text, report.FromAi, item.Evidence, null, InsightSeverity.Warning);
+                    AddItem(list, ref sort, SectionEventAnalysis, item.Text, report.FromAi, item.Evidence, null,
+                        ParseSeverity(item.RiskLevel, InsightSeverity.Info));
             }
 
             if (report.Prediction != null && report.Prediction.Available && !string.IsNullOrWhiteSpace(report.Prediction.Text))
@@ -147,46 +150,46 @@ namespace Netvium.Helpers
         private static List<AiFindingItem> BuildPerformance(ServerAnalysisContext ctx)
         {
             var items = new List<AiFindingItem>();
-            if (ctx.CpuPercent.HasValue)
-                items.Add(Item(CpuLabel(ctx.CpuPercent.Value), $"CPU={ctx.CpuPercent}%"));
-            if (ctx.RamPercent.HasValue)
-                items.Add(Item(RamLabel(ctx.RamPercent.Value), $"RAM={ctx.RamPercent:0}%"));
-            if (ctx.DiskPercent.HasValue)
-                items.Add(Item(DiskLabel(ctx.DiskPercent.Value), $"Disk={ctx.DiskPercent:0}%"));
+            AddMetric(items, ctx.CpuTrendAssessment);
+            AddMetric(items, ctx.RamTrendAssessment);
+            AddMetric(items, ctx.DiskTrendAssessment);
             if (ctx.LatencyMs.HasValue)
                 items.Add(Item(LatencyLabel(ctx.LatencyMs.Value), $"Latency={ctx.LatencyMs}ms"));
             return items;
         }
 
-        private static List<AiFindingItem> BuildSecurity(ServerAnalysisContext ctx)
+        private static void AddMetric(List<AiFindingItem> items, MetricTrendAssessment metric)
         {
-            var items = new List<AiFindingItem>();
-            items.Add(Item($"RDP: {(ctx.RdpOpen ? "erişilebilir" : "kapalı")}", ctx.RdpOpen ? "TCP 3389 açık" : "3389 kapalı", ctx.RdpOpen ? "Info" : "Warning"));
-            items.Add(Item($"WinRM: {(ctx.WinRmRunning ? "aktif" : "pasif")}", ctx.WinRmRunning ? "WinRM Running" : "WinRM stopped/unknown", ctx.WinRmRunning ? "Info" : "Warning"));
-            items.Add(Item($"Firewall: {(ctx.FirewallRunning ? "aktif" : "devre dışı")}", ctx.FirewallRunning ? "mpssvc Running" : "mpssvc stopped", ctx.FirewallRunning ? "Info" : "Critical"));
-            items.Add(Item($"Remote Registry: {ctx.RemoteRegistryState}", $"Servis durumu: {ctx.RemoteRegistryState}", "Info"));
-            items.Add(Item($"SMB: {(ctx.SmbRunning ? "aktif" : "pasif")}", "LanmanServer durumu", "Info"));
-            if (!string.IsNullOrWhiteSpace(ctx.LastUser))
-                items.Add(Item($"Son kullanıcı: {ctx.LastUser}", "WMI LastUser", "Info"));
-            if (ctx.OpenPorts.Count > 0)
-                items.Add(Item($"Açık portlar: {string.Join(", ", ctx.OpenPorts.Take(8))}", "ListenPorts WMI", "Info"));
-            return items;
+            if (!metric.CurrentValue.HasValue) return;
+            var risk = metric.State is MetricTrendState.SustainedCritical or MetricTrendState.CriticalSpike ? "Critical"
+                : metric.State is MetricTrendState.SustainedWarning or MetricTrendState.InsufficientHistory ? "Warning" : "Info";
+            var state = metric.State switch
+            {
+                MetricTrendState.SustainedCritical => "sürekli kritik",
+                MetricTrendState.SustainedWarning => "sürekli yüksek",
+                MetricTrendState.CriticalSpike => "anlık kritik (sustained değil)",
+                MetricTrendState.InsufficientHistory => "yüksek; geçmiş yetersiz",
+                _ => "normal"
+            };
+            items.Add(Item($"{metric.Metric}: %{metric.CurrentValue:0} — {state}", metric.Evidence, risk));
         }
+
+        private static List<AiFindingItem> BuildSecurity(ServerAnalysisContext ctx) =>
+            ctx.RuleFindings
+                .Where(f => f.Category == "Security" || f.Code is "pending_restart")
+                .Select(f => Item(f.Title, f.Evidence, f.Severity.ToString()))
+                .ToList();
 
         private static List<AiFindingItem> BuildEventAnalysis(ServerAnalysisContext ctx)
         {
-            var items = new List<AiFindingItem>();
-            if (ctx.RecentEventLogs.Count == 0)
+            var findings = ctx.RuleFindings.Where(f => f.Category == "Events")
+                .Select(f => Item(f.Title, f.Evidence, f.Severity.ToString())).ToList();
+            if (findings.Count > 0) return findings;
+            return new List<AiFindingItem>
             {
-                items.Add(Item("Son dönemde önemli olay kaydı yok.", "Event log verisi alınamadı veya kayıt yok."));
-                return items;
-            }
-
-            foreach (var ev in ctx.RecentEventLogs.Take(3))
-                items.Add(Item(ev, "WMI Event Log"));
-            return items;
+                Item("Olay verisi doğrulanamadı veya yakın dönemde olay yok", "Yapısal event listesi boş; yokluk ile erişilemeyen veri ayrıştırılamadı.", "Info")
+            };
         }
-
         private static List<AiActionItem> BuildActionsFromFindings(IReadOnlyList<AnalysisFinding> findings)
         {
             return findings
@@ -211,6 +214,8 @@ namespace Netvium.Helpers
             if (ctx.LatencyMs.HasValue) list.Add(Ev("Latency", $"{ctx.LatencyMs}ms"));
             list.Add(Ev("Health Score", $"{ctx.HealthScore}"));
             list.Add(Ev("Risk Score", $"{ctx.RiskScore}"));
+            list.Add(Ev("Data Source", $"{ctx.DataQuality.Source}; age={(ctx.DataQuality.Age.HasValue ? ctx.DataQuality.Age.Value.TotalSeconds.ToString("0") + "s" : "unknown")}; confidence={ctx.DataQuality.ConfidencePercent}%"));
+            list.Add(Ev("Source Comparison", ctx.DataQuality.SourcesCompared ? (ctx.DataQuality.HasSourceConflict ? "conflict" : "consistent") : "not compared"));
             if (ctx.StoppedCriticalServices.Count > 0)
                 list.Add(Ev("Stopped Services", string.Join(", ", ctx.StoppedCriticalServices.Take(4))));
             if (ctx.RecentEventLogs.Count > 0)
@@ -238,6 +243,8 @@ namespace Netvium.Helpers
             });
         }
 
+        private static InsightSeverity ParseSeverity(string? value, InsightSeverity fallback) =>
+            Enum.TryParse<InsightSeverity>(value, true, out var parsed) ? parsed : fallback;
         private static AiFindingItem Item(string text, string evidence, string? risk = null) =>
             new() { Text = text, Evidence = evidence, RiskLevel = risk };
 

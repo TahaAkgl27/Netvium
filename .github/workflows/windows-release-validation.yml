@@ -45,6 +45,20 @@ jobs:
       - name: AIGuide tests
         run: dotnet test Netvium.AIGuide.Tests/Netvium.AIGuide.Tests.csproj -c Debug --no-restore --logger "trx;LogFileName=aiguide.trx"
 
+      - name: Deterministic AIGuide QA gate
+        shell: pwsh
+        run: |
+          $output = dotnet run --project tools/AIGuideQaRunner/AIGuideQaRunner.csproj -c Release --no-restore 2>&1 | Out-String
+          Write-Host $output
+          if ($LASTEXITCODE -ne 0) { throw "AIGuide QA runner failed." }
+          $pass = [regex]::Match($output, 'PASS:\s*(\d+)/(\d+)')
+          $confidence = [regex]::Match($output, 'Confidence Accuracy %:\s*([0-9]+(?:\.[0-9]+)?)')
+          if (-not $pass.Success -or [int]$pass.Groups[1].Value -ne 138 -or [int]$pass.Groups[2].Value -ne 138) {
+            throw "AIGuide QA gate requires 138/138 PASS."
+          }
+          if (-not $confidence.Success -or [double]$confidence.Groups[1].Value -lt 90.0) {
+            throw "Confidence Accuracy must be at least 90%."
+          }
       - name: Rc2Smoke
         run: dotnet run --project tools/Rc2Smoke/Rc2Smoke.csproj -c Release --no-restore
 

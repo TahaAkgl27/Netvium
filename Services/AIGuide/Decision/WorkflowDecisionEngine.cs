@@ -193,13 +193,17 @@ namespace Netvium.Services.AIGuide.Decision
                 && !string.IsNullOrWhiteSpace(target.UserName)
                 && (target.HasUserProvidedPath || target.TargetFromSelection);
 
+            var hasRecognizedScreen = screenType != MmcConsoleKind.Unknown
+                || !string.IsNullOrWhiteSpace(displayName)
+                && !displayName.Equals("Unknown", StringComparison.OrdinalIgnoreCase);
             var confidence = _confidenceEngine.Evaluate(new ConfidenceInput
             {
                 IsWrongScreen = false,
-                IsUnknownScreen = screenType == MmcConsoleKind.Unknown,
-                ScreenCorrect = screenCorrect && screenType != MmcConsoleKind.Unknown,
+                IsUnknownScreen = !hasRecognizedScreen,
+                ScreenCorrect = screenCorrect && hasRecognizedScreen,
                 IntentDetected = intent != AdminUserIntent.Unknown,
                 IntentUnknown = intent == AdminUserIntent.Unknown,
+                IsExploratoryQuestion = IsExploratoryScreenQuestion(input.UserQuestion),
                 WorkflowMatched = !isGeneric,
                 TargetVisible = context.TargetVisible,
                 TargetVerified = target.HasUserProvidedPath,
@@ -261,6 +265,15 @@ namespace Netvium.Services.AIGuide.Decision
             bool isWrongScreen) =>
             _reasoningEnricher.Enrich(input, result, screenType, displayName, isWrongScreen);
 
+        private static bool IsExploratoryScreenQuestion(string? question)
+        {
+            var text = QuestionTextNormalizer.Normalize(question);
+            return text.Contains("bu ekranda ne yapabilirim", StringComparison.Ordinal)
+                || text.Contains("bu ekran nedir", StringComparison.Ordinal)
+                || text.Contains("hangi ekrandayim", StringComparison.Ordinal)
+                || text.Contains("what can i do on this screen", StringComparison.Ordinal)
+                || text.Contains("what is this screen", StringComparison.Ordinal);
+        }
         private static string BuildStructuredSummary(WorkflowContext ctx, WorkflowStepResult step) =>
             $"Workflow={ctx.WorkflowName}; Step={step.StepId}; Intent={ctx.Intent}; Screen={ctx.ScreenDisplayName}";
     }

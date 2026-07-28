@@ -114,97 +114,20 @@ namespace Netvium.Helpers
 
         public static List<SmartInsight> Analyze(WmiSnapshot current, List<WmiSnapshot>? history, long? pingMs, bool rdpOpen)
         {
-            var insights = new List<SmartInsight>();
-            if (current == null) return insights;
+            if (current == null)
+                return new List<SmartInsight>();
 
-            if (!rdpOpen)
-                insights.Add(new SmartInsight("Bağlantı Riski: RDP Portu Kapalı", InsightSeverity.Critical, "🚫",
-                    reason: "3389 numaralı RDP portuna ulaşılamıyor.",
-                    action: "Güvenlik duvarı ve RDP servis durumunu kontrol edin."));
-            else
-                insights.Add(new SmartInsight("RDP Portu Erişilebilir", InsightSeverity.Info, "🟢",
-                    reason: "Uzak masaüstü bağlantı katmanı aktif.",
-                    action: "Bağlantı kurulabilir."));
-
-            if (pingMs is >= 0)
-            {
-                var latencyColor = GetLatencyClass(pingMs.Value);
-                insights.Add(new SmartInsight($"Gecikme: {pingMs.Value}ms ({latencyColor.label})", latencyColor.severity, "📡",
-                    reason: pingMs >= 150 ? "Yüksek gecikme kullanıcı deneyimini etkileyebilir." : "Ağ gecikmesi kabul edilebilir düzeyde.",
-                    action: pingMs >= 150 ? "Ağ yolunu ve yoğunluğu kontrol edin." : null));
-            }
-
-            if (!current.Connected)
-            {
-                insights.Add(new SmartInsight("WMI verisi alınamadı", InsightSeverity.Warning, "⚠️",
-                    reason: "Yalnızca ağ erişimi doğrulandı; CPU/RAM/Disk ve servis listesi canlı alınamadı.",
-                    action: "Kimlik bilgilerini ve WMI/RPC erişimini kontrol edip Yenile ile tekrar deneyin."));
-                return FilterInsights(insights);
-            }
-
-            if (current.DiskUsedPct is >= 80)
-            {
-                var sev = current.DiskUsedPct >= 90 ? InsightSeverity.Critical : InsightSeverity.Warning;
-                insights.Add(new SmartInsight($"Disk Kullanımı: %{current.DiskUsedPct:0}", sev, "💾",
-                    reason: current.DiskUsedPct >= 90 ? "Disk doluluğu kritik seviyede." : "Disk kullanımı yükseliyor.",
-                    action: "Gereksiz dosyaları temizleyin veya diski genişletin."));
-            }
-
-            if (current.RamUsedPct is >= 85)
-                insights.Add(new SmartInsight($"RAM Kullanımı: %{current.RamUsedPct:0}", InsightSeverity.Warning, "🧠",
-                    reason: "Bellek baskısı performansı düşürebilir.",
-                    action: "Bellek tüketen işlemleri ve servisleri gözden geçirin."));
-
-            if (current.CpuPct is >= 80)
-            {
-                var sev = current.CpuPct >= 95 ? InsightSeverity.Critical : InsightSeverity.Warning;
-                insights.Add(new SmartInsight($"CPU Kullanımı: %{current.CpuPct}", sev, "🔥",
-                    reason: "İşlemci yükü yüksek.",
-                    action: "CPU tüketen süreçleri ve zamanlanmış görevleri kontrol edin."));
-            }
-
-            if (current.Uptime.HasValue)
-            {
-                double days = current.Uptime.Value.TotalDays;
-                if (days > 90)
-                    insights.Add(new SmartInsight($"Uptime: {days:0} gün", InsightSeverity.Warning, "📅",
-                        reason: "Uzun süreli çalışma yama/stabilite birikimine işaret edebilir.",
-                        action: "Bakım penceresinde yeniden başlatmayı planlayın."));
-            }
-
-            if (current.Services != null && current.Services.Any())
-            {
-                var criticalStopped = current.Services
-                    .Where(s => s.IsCritical && !s.State.Equals("Running", StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-                if (criticalStopped.Any())
-                {
-                    insights.Add(new SmartInsight($"{criticalStopped.Count} kritik servis durdurulmuş", InsightSeverity.Critical, "🚨",
-                        reason: $"Servisler: {string.Join(", ", criticalStopped.Take(4).Select(s => s.Display))}",
-                        action: "Kritik servisleri başlatın ve bağımlılıklarını kontrol edin."));
-                }
-
-                var iis = current.Services.Any(s => s.Name.Contains("W3SVC", StringComparison.OrdinalIgnoreCase) || s.Display.Contains("IIS", StringComparison.OrdinalIgnoreCase));
-                var sql = current.Services.Any(s => s.Name.Contains("MSSQL", StringComparison.OrdinalIgnoreCase) || s.Display.Contains("SQL", StringComparison.OrdinalIgnoreCase));
-                if (iis)
-                    insights.Add(new SmartInsight("IIS rolü tespit edildi", InsightSeverity.Info, "🌐",
-                        reason: "W3SVC/IIS ile ilişkili servis kaydı mevcut.", action: "Uygulama havuzu ve site sağlığını izleyin."));
-                if (sql)
-                    insights.Add(new SmartInsight("SQL Server bileşeni tespit edildi", InsightSeverity.Info, "🗄️",
-                        reason: "SQL ile ilişkili servis kaydı mevcut.", action: "SQL agent ve disk I/O metriklerini izleyin."));
-            }
-
-            if (current.Timeline?.Count > 0)
-            {
-                var recent = current.Timeline.Take(3).Select(t => $"{t.Type}: {t.Message}").ToList();
-                insights.Add(new SmartInsight("Son olay kayıtları özeti", InsightSeverity.Info, "📋",
-                    reason: string.Join(" | ", recent),
-                    action: "Kritik Error/Warning kayıtlarını inceleyin."));
-            }
-
-            return FilterInsights(insights);
+            var server = new ServerInfo("Smart Analysis", current.Ip, string.Empty, string.Empty, string.Empty);
+            var ctx = ServerAnalysisPipeline.Build(
+                current,
+                server,
+                string.IsNullOrWhiteSpace(current.Ip) ? "local-analysis" : current.Ip,
+                pingMs,
+                rdpOpen,
+                history,
+                healthScore: CalculateRiskScore(current, pingMs, rdpOpen));
+            return BuildRuleOnlyInsights(ctx);
         }
-
         public static SmartInsight BuildInsufficientAiInsight() => new SmartInsight(
             "AI analizi için yeterli canlı veri yok. Yenile ile tekrar deneyin.",
             InsightSeverity.Info,
